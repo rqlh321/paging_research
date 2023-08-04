@@ -12,6 +12,9 @@ interface MessageDao {
     @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.POSITION}")
     fun read(): PagingSource<Int, MessageDatabaseEntity>
 
+    @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.POSITION}")
+    suspend fun readList(): List<MessageDatabaseEntity>
+
     @Query("SELECT ${MessageDatabaseEntity.POSITION} FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.POSITION} LIMIT 1")
     suspend fun earliestPosition(): Int
 

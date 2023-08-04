@@ -1,5 +1,7 @@
 package com.example.paging_reserch.network
 
+import kotlinx.coroutines.delay
+
 class MessagesServiceApiMock : MessagesServiceApi {
 
     override suspend fun messages(
@@ -13,6 +15,7 @@ class MessagesServiceApiMock : MessagesServiceApi {
         isDirectionToLatest: Boolean,
         limit: Int,
     ): List<MessageNetworkDto> {
+        delay(10000)
         val from = if (isDirectionToLatest) borderId + 1 else borderId - 1
         val to = if (isDirectionToLatest)
             borderId + limit else borderId - limit

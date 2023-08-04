@@ -42,15 +42,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val positionToScrollMutable = MutableStateFlow(0)
     val positionToScroll: StateFlow<Int> = positionToScrollMutable
 
-    val pagingDataFlow: StateFlow<PagingData<Message>> = pager.flow
+    val pagingDataFlow: Flow<PagingData<Message>> = pager.flow
         .map { page -> page.map { Message(it.position, it.position.toString(), it.isWatched) } }
-        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+        .cachedIn(viewModelScope)
 
     init {
         messageDao.notWatchedMessagesFlow()
             .onEach {
                 delay(100)
-                positionToScrollMutable.emit(it.size)
+                val position = it.size
+                positionToScrollMutable.emit(position)
             }
             .launchIn(viewModelScope)
     }

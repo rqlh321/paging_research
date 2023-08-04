@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,9 +50,8 @@ class MainActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
 
         viewModel.pagingDataFlow
-            .cachedIn(lifecycleScope)
             .flowWithLifecycle(lifecycle)
-            .onEach { messages -> messagesAdapter.submitData(lifecycle, messages) }
+            .onEach(messagesAdapter::submitData)
             .launchIn(lifecycleScope)
 
     }
