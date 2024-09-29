@@ -3,15 +3,25 @@ package com.example.paging_reserch
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import androidx.room.Room
-import com.example.paging_reserch.adapter.Message
+import com.example.paging_reserch.adapter.MessageItem
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.MessageDatabaseEntity
 import com.example.paging_reserch.network.MessagesServiceApiMock
 import com.example.paging_reserch.paging.MessageRemoteMediator
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
@@ -42,8 +52,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val positionToScrollMutable = MutableStateFlow(0)
     val positionToScroll: StateFlow<Int> = positionToScrollMutable
 
-    val pagingDataFlow: Flow<PagingData<Message>> = pager.flow
-        .map { page -> page.map { Message(it.position, it.position.toString(), it.isWatched) } }
+    val pagingDataFlow: Flow<PagingData<MessageItem>> = pager.flow
+        .map { page ->
+            page.map(::MessageItem)
+        }
         .cachedIn(viewModelScope)
 
     init {
@@ -61,8 +73,9 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             val position = messageDao.earliestPosition().minus(1)
             val incomeMessages = listOf(
                 MessageDatabaseEntity(
-                    position = position,
+                    id = position,
                     chatId = CHAT_ID,
+                    timestamp = System.currentTimeMillis(),
                     isWatched = false
                 )
             )
@@ -76,7 +89,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun messageWatched(message: Message) {
+    fun messageWatched(message: MessageItem) {
         viewModelScope.launch {
             delay(500)
             messageDao.watched(message.id)
