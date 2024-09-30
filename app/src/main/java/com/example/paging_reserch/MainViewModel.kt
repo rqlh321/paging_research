@@ -70,10 +70,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun emulateMessageReceive() {
         viewModelScope.launch {
-            val position = messageDao.earliestPosition().minus(1)
+            val id = messageDao.earliestPosition().toLong().plus(1).toString()
             val incomeMessages = listOf(
                 MessageDatabaseEntity(
-                    id = position,
+                    id = id,
                     chatId = CHAT_ID,
                     timestamp = System.currentTimeMillis(),
                     isWatched = false

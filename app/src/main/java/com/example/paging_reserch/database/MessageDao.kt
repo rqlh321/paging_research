@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MessageDao {
-    @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.MESSAGE_ID}")
+    @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.TIMESTAMP} DESC")
     fun read(): PagingSource<Int, MessageDatabaseEntity>
 
-    @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.MESSAGE_ID}")
+    @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.TIMESTAMP} DESC")
     suspend fun readList(): List<MessageDatabaseEntity>
 
     @Query("SELECT ${MessageDatabaseEntity.MESSAGE_ID} FROM ${MessageDatabaseEntity.TABLE_NAME} ORDER BY ${MessageDatabaseEntity.MESSAGE_ID} LIMIT 1")
-    suspend fun earliestPosition(): Int
+    suspend fun earliestPosition(): String
 
     @Query("UPDATE ${MessageDatabaseEntity.TABLE_NAME} SET ${MessageDatabaseEntity.IS_WATCHED} = 1")
     suspend fun markAsWatched(): Int
@@ -30,7 +30,7 @@ interface MessageDao {
     @Query("SELECT * FROM ${MessageDatabaseEntity.TABLE_NAME} WHERE ${MessageDatabaseEntity.IS_WATCHED} = 0")
     fun notWatchedMessagesFlow(): Flow<List<MessageDatabaseEntity>>
 
-    @Query("UPDATE ${MessageDatabaseEntity.TABLE_NAME} SET ${MessageDatabaseEntity.IS_WATCHED} = 1 WHERE ${MessageDatabaseEntity.MESSAGE_ID} = :position")
-    suspend fun watched(position: Int)
+    @Query("UPDATE ${MessageDatabaseEntity.TABLE_NAME} SET ${MessageDatabaseEntity.IS_WATCHED} = 1 WHERE ${MessageDatabaseEntity.MESSAGE_ID} = :id")
+    suspend fun watched(id: String)
 
 }

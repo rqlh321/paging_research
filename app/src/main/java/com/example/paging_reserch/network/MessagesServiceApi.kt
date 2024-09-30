@@ -2,8 +2,8 @@ package com.example.paging_reserch.network
 
 interface MessagesServiceApi {
     suspend fun messages(
-        borderPosition: Int? = null,
-        isDirectionToLatest: Boolean = true,
+        borderPosition: Long,
+        isDirectionToLatest: Boolean,
         limit: Int,
     ): List<MessageNetworkDto>
 }

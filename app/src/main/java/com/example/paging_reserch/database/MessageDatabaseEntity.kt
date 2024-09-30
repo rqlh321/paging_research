@@ -10,7 +10,7 @@ import com.example.paging_reserch.database.MessageDatabaseEntity.Companion.TABLE
     primaryKeys = [MESSAGE_ID]
 )
 data class MessageDatabaseEntity(
-    @ColumnInfo(name = MESSAGE_ID) val id: Int,
+    @ColumnInfo(name = MESSAGE_ID) val id: String,
     @ColumnInfo(name = TIMESTAMP) val timestamp: Long,
     @ColumnInfo(name = CHAT_ID) val chatId: String,
     @ColumnInfo(name = IS_WATCHED) val isWatched: Boolean,

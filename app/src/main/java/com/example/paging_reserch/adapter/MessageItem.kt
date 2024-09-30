@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class MessageItem(
-    val id: Int,
+    val id: String,
     val time: String,
     val isWatched: Boolean,
 ) {
