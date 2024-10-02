@@ -1,4 +1,4 @@
-package com.example.paging_reserch
+package com.example.paging_reserch.screen.chat
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,9 +8,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import androidx.room.Room
-import com.example.paging_reserch.adapter.MessageItem
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.MessageDatabaseEntity
 import com.example.paging_reserch.network.MessagesServiceApiMock
@@ -18,13 +18,11 @@ import com.example.paging_reserch.paging.MessageRemoteMediator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class MainViewModel(app: Application) : AndroidViewModel(app) {
+class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
     private val db = Room.databaseBuilder(app, AppDatabase::class.java, "database-name")
         .build()
@@ -49,33 +47,41 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         ),
     ) { messageDao.read() }
 
-    private val positionToScrollMutable = MutableStateFlow(0)
-    val positionToScroll: StateFlow<Int> = positionToScrollMutable
-
-    val pagingDataFlow: Flow<PagingData<MessageItem>> = pager.flow
-        .map { page ->
-            page.map(::MessageItem)
-        }
-        .cachedIn(viewModelScope)
-
-    init {
-        messageDao.notWatchedMessagesFlow()
-            .onEach {
-                delay(100)
-                val position = it.size
-                positionToScrollMutable.emit(position)
+    private val dividerStateFlow = MutableStateFlow("")
+    val pagingDataFlow: Flow<PagingData<MessageItem>> = combine(
+        pager.flow
+            .map { it.map(::TextMessageItem) }
+            .map {
+                it.insertSeparators { m1: TextMessageItem?, m2: TextMessageItem? ->
+                    val newerDate = m1?.date
+                    val olderDate = m2?.date
+                    if (newerDate != null && olderDate != null && newerDate != olderDate) {
+                        DateMessageItem(date = newerDate)
+                    } else {
+                        null
+                    }
+                }
             }
-            .launchIn(viewModelScope)
-    }
+            .cachedIn(viewModelScope),
+        dividerStateFlow
+    ) { pager, id ->
+        pager.insertSeparators { messageItem: MessageItem?, _: MessageItem? ->
+            if (messageItem?.id == id) {
+                DividerMessageItem(text = "- divider -")
+            } else {
+                null
+            }
+        }
+    }.cachedIn(viewModelScope)
 
     fun emulateMessageReceive() {
         viewModelScope.launch {
-            val id = messageDao.earliestPosition().toLong().plus(1).toString()
+            val currentTimeMillis = System.currentTimeMillis()
             val incomeMessages = listOf(
                 MessageDatabaseEntity(
-                    id = id,
+                    id = currentTimeMillis.toString(),
                     chatId = CHAT_ID,
-                    timestamp = System.currentTimeMillis(),
+                    timestamp = currentTimeMillis,
                     isWatched = false
                 )
             )
@@ -89,7 +95,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun messageWatched(message: MessageItem) {
+    fun onMessageClick(message: MessageItem) {
+        viewModelScope.launch {
+            dividerStateFlow.emit(message.id)
+        }
+    }
+
+    fun messageWatched(message: TextMessageItem) {
         viewModelScope.launch {
             delay(500)
             messageDao.watched(message.id)

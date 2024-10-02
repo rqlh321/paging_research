@@ -1,12 +1,11 @@
 package com.example.paging_reserch.paging
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.example.paging_reserch.MainViewModel
+import com.example.paging_reserch.screen.chat.ChatViewModel
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.MessageDao
 import com.example.paging_reserch.database.MessageDatabaseEntity
@@ -27,7 +26,6 @@ class MessageRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, MessageDatabaseEntity>
     ) = try {
-        Log.d(this::class.simpleName, loadType.toString())
         when (loadType) {
             LoadType.REFRESH -> refresh()
             LoadType.PREPEND -> prepend()
@@ -44,7 +42,7 @@ class MessageRemoteMediator(
             val response = messageService.messages(
                 borderPosition = initialKey,
                 isDirectionToLatest = true,
-                limit = MainViewModel.INIT_SIZE
+                limit = ChatViewModel.INIT_SIZE
             )
 
             val messageEntities = response.map {
@@ -59,7 +57,7 @@ class MessageRemoteMediator(
             val remoteKeyEntity = RemoteKeyDatabaseEntity(
                 chatId = chatId,
                 prependKey = null,
-                appendKey = if (response.size < MainViewModel.INIT_SIZE) null else appendKey
+                appendKey = if (response.size < ChatViewModel.INIT_SIZE) null else appendKey
             )
             database.withTransaction {
                 remoteKeyDao.update(remoteKeyEntity)
@@ -74,7 +72,7 @@ class MessageRemoteMediator(
             val response = messageService.messages(
                 borderPosition = it.toLong(),
                 isDirectionToLatest = false,
-                limit = MainViewModel.INIT_SIZE
+                limit = ChatViewModel.INIT_SIZE
             )
 
             val messageEntities = response.map {
@@ -90,7 +88,7 @@ class MessageRemoteMediator(
                 remoteKeyDao.updatePrepend(chatId, prependKey)
                 messageDao.update(messageEntities)
             }
-            response.size < MainViewModel.INIT_SIZE
+            response.size < ChatViewModel.INIT_SIZE
         } ?: true
 
 
@@ -102,7 +100,7 @@ class MessageRemoteMediator(
             val response = messageService.messages(
                 borderPosition = it.toLong(),
                 isDirectionToLatest = true,
-                limit = MainViewModel.INIT_SIZE
+                limit = ChatViewModel.INIT_SIZE
             )
 
             val messageEntities = response.map {
@@ -118,7 +116,7 @@ class MessageRemoteMediator(
                 remoteKeyDao.updateAppend(chatId, appendKey)
                 messageDao.update(messageEntities)
             }
-            response.size < MainViewModel.INIT_SIZE
+            response.size < ChatViewModel.INIT_SIZE
         } ?: true
 
 
