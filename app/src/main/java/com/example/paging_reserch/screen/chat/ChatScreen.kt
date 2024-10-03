@@ -1,23 +1,17 @@
 package com.example.paging_reserch.screen.chat
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -25,20 +19,28 @@ import com.example.paging_reserch.screen.chat.compose.InitialPageLoading
 import com.example.paging_reserch.screen.chat.compose.LoadingError
 import com.example.paging_reserch.screen.chat.compose.Message
 import com.example.paging_reserch.screen.chat.compose.NextPageLoading
-import kotlinx.coroutines.launch
 
 @Composable
 fun ChatScreen() {
+    val viewModel = viewModel<ChatViewModel>()
+    val pager = viewModel.pagingDataFlow.collectAsLazyPagingItems()
+
+    ChatScreenContent(
+        pager = pager,
+        onMessageClick = viewModel::onMessageClick,
+    )
+}
+
+@Composable
+private fun ChatScreenContent(
+    pager: LazyPagingItems<MessageItem>,
+    onMessageClick: (MessageItem) -> Unit = {},
+) {
+    val listState = rememberLazyListState()
+
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+        modifier = Modifier.fillMaxSize()
     ) {
-        val listState = rememberLazyListState()
-        val viewModel = viewModel<ChatViewModel>()
-
-        val pager = viewModel.pagingDataFlow.collectAsLazyPagingItems()
-
         LazyColumn(
             reverseLayout = true,
             state = listState,
@@ -78,7 +80,7 @@ fun ChatScreen() {
                     contentType = pager.itemContentType { it.type }
                 ) {
                     val item = pager[it]
-                    Message(item, viewModel::onMessageClick)
+                    Message(item, onMessageClick)
                 }
             }
             when (pager.loadState.append) {
@@ -99,27 +101,6 @@ fun ChatScreen() {
                 is LoadState.NotLoading -> Unit
             }
         }
-
-        Control(viewModel, listState)
     }
 }
 
-@Composable
-private fun Control(
-    viewModel: ChatViewModel,
-    listState: LazyListState
-) {
-    val scope = rememberCoroutineScope()
-
-    Column {
-        Button(viewModel::allMessagesWatched) {
-            Text("Отметить все сообщения прочитанными")
-        }
-        Button({ scope.launch { listState.animateScrollToItem(0, 0) } }) {
-            Text("Прокрутить в начало")
-        }
-        Button(viewModel::emulateMessageReceive) {
-            Text("Входящее сообщение")
-        }
-    }
-}

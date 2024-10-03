@@ -28,7 +28,7 @@ fun Message(
         is DateMessageItem -> {
             Text(
                 text = item.date,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -38,7 +38,7 @@ fun Message(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 text = item.text,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
