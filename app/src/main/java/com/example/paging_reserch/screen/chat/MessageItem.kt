@@ -22,9 +22,8 @@ data class DateMessageItem(
 data class DividerMessageItem(
     override val id: String = UUID.randomUUID().toString(),
     val text: String,
-) : MessageItem() {
-    override val type = Const.DIVIDER
-}
+    override val type: String = Const.DIVIDER
+) : MessageItem()
 
 data class TextMessageItem(
     override val id: String,
@@ -47,6 +46,7 @@ data class TextMessageItem(
 object Const {
     const val MESSAGE = "message"
     const val DIVIDER = "divider"
+    const val NEW_DIVIDER = "new"
     const val DATE = "date"
     val NOT_MY_MESSAGE_CORNERS = RoundedCornerShape(
         topStart = 16.dp,

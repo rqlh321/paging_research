@@ -23,8 +23,6 @@ class ChatPresetViewModel(
     fun emulateMessageReceive(count: Int) {
         viewModelScope.launch {
             val currentTimeMillis = System.currentTimeMillis()
-            val firstUnreadMessageId = currentTimeMillis.toString()
-            chatDao.updateFirstUnread(CHAT_ID, firstUnreadMessageId)
 
             val incomeMessages = (0 until count).map {
                 MessageDatabaseEntity(
@@ -34,6 +32,7 @@ class ChatPresetViewModel(
                     isWatched = false
                 )
             }
+            chatDao.updateFirstUnread(CHAT_ID, incomeMessages.last().id)
             messageDao.update(incomeMessages)
         }
     }

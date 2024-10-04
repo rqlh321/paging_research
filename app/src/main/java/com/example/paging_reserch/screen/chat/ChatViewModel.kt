@@ -19,8 +19,9 @@ import com.example.paging_reserch.screen.preset.ChatPresetViewModel.Companion.CH
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
@@ -54,39 +55,46 @@ class ChatViewModel(
         ),
     ) { messageDao.read() }
 
-    val pagingDataFlow: Flow<PagingData<MessageItem>> = combine(
-        pager.flow
-            .map { it.map(::TextMessageItem) }
-            .map {
-                it.insertSeparators { m1: TextMessageItem?, m2: TextMessageItem? ->
-                    val newerDate = m1?.date
-                    val olderDate = m2?.date
-                    if (newerDate != null && olderDate != null && newerDate != olderDate) {
-                        DateMessageItem(date = newerDate)
+    val pagingDataFlow: Flow<PagingData<MessageItem>> = chatDao.firstUnreadMessageIdFlow(CHAT_ID)
+        .take(1)
+        .flatMapLatest { firstUnreadMessageId ->
+            combine(
+                pager.flow
+                    .map { it.map { TextMessageItem(it) } }
+                    .map {
+                        it.insertSeparators { m1: TextMessageItem?, m2: TextMessageItem? ->
+                            val newerDate = m1?.date
+                            val olderDate = m2?.date
+                            if (newerDate != null && olderDate != null && newerDate != olderDate) {
+                                DateMessageItem(date = newerDate)
+                            } else {
+                                null
+                            }
+                        }
+                    }
+                    .cachedIn(viewModelScope),
+                clickedMessageIdFlow,
+            ) { pager, clickedMessageId ->
+                pager.insertSeparators { messageItem: MessageItem?, _: MessageItem? ->
+                    if (messageItem?.id == firstUnreadMessageId) {
+                        DividerMessageItem(
+                            text = "- New -",
+                            type = Const.NEW_DIVIDER
+                        )
                     } else {
                         null
                     }
                 }
-            }
-            .cachedIn(viewModelScope),
-        clickedMessageIdFlow,
-        chatDao.firstUnreadMessageIdFlow(CHAT_ID).distinctUntilChanged()
-    ) { pager, clickedMessageId, firstUnreadMessageId ->
-        pager.insertSeparators { messageItem: MessageItem?, _: MessageItem? ->
-            if (messageItem?.id == firstUnreadMessageId) {
-                DividerMessageItem(text = "- New -")
-            } else {
-                null
+                    .insertSeparators { messageItem: MessageItem?, _: MessageItem? ->
+                        if (messageItem?.id == clickedMessageId) {
+                            DividerMessageItem(text = "- divider -")
+                        } else {
+                            null
+                        }
+                    }
             }
         }
-            .insertSeparators { messageItem: MessageItem?, _: MessageItem? ->
-                if (messageItem?.id == clickedMessageId) {
-                    DividerMessageItem(text = "- divider -")
-                } else {
-                    null
-                }
-            }
-    }.cachedIn(viewModelScope)
+        .cachedIn(viewModelScope)
 
     fun onMessageClick(message: MessageItem) {
         viewModelScope.launch {
@@ -96,6 +104,7 @@ class ChatViewModel(
 
     companion object {
         const val CHAT_KEY = "chat_key"
+        const val FIRST_UNREAD_MESSAGE_ID_KEY = "first_unread_key"
 
         const val PREFETCH_SIZE = 30
         const val INIT_SIZE = 30

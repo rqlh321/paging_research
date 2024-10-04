@@ -16,6 +16,7 @@ fun ChatPresetsScreen(
         Button({ viewModel.createChat() }) { Text("Создать чат") }
         Button({ viewModel.allMessagesWatched() }) { Text("Отметить все сообщения прочитанными") }
         Button({ viewModel.emulateMessageReceive(1) }) { Text("Получить сообщение") }
+        Button({ viewModel.emulateMessageReceive(10) }) { Text("Получить 10 сообщений") }
         Button({ viewModel.emulateMessageReceive(100) }) { Text("Получить 100 сообщений") }
         Button(toChat) { Text("Открыть чат") }
     }
