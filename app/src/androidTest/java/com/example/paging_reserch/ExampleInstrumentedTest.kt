@@ -22,7 +22,8 @@ class ExampleInstrumentedTest {
     fun useAppContext() = runBlocking {
         val messages = (0..100).map {
             MessageDatabaseEntity(
-                position = it,
+                id = it.toString(),
+                timestamp = 0L,
                 chatId = "",
                 isWatched = false
             )

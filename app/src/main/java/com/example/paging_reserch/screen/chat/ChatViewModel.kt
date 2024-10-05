@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -29,7 +30,7 @@ class ChatViewModel(
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-    private val chatId = savedStateHandle.get<String>(CHAT_KEY)
+    private val args = savedStateHandle.toRoute<ChatDestination>()
 
     private val db = Room.databaseBuilder(app, AppDatabase::class.java, "database-name").build()
     private val messagesService = MessagesServiceApiMock()

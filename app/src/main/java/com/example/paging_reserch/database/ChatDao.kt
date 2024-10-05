@@ -16,6 +16,9 @@ interface ChatDao {
     @Query("SELECT * FROM ${ChatDatabaseEntity.TABLE_NAME} WHERE ${ChatDatabaseEntity.CHAT_ID} = :chatId")
     suspend fun get(chatId: String): ChatDatabaseEntity
 
+    @Query("SELECT * FROM ${ChatDatabaseEntity.TABLE_NAME}")
+    fun getAllChatsFlow(): Flow<List<ChatDatabaseEntity>>
+
     @Query("SELECT first_unread_message_id FROM ${ChatDatabaseEntity.TABLE_NAME} WHERE ${ChatDatabaseEntity.CHAT_ID} = :chatId")
     fun firstUnreadMessageIdFlow(chatId: String): Flow<String>
 

@@ -8,6 +8,13 @@ import androidx.room.Room
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.ChatDatabaseEntity
 import com.example.paging_reserch.database.MessageDatabaseEntity
+import com.example.paging_reserch.screen.chat.ChatDestination
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ChatPresetViewModel(
@@ -15,16 +22,65 @@ class ChatPresetViewModel(
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-
     private val db = Room.databaseBuilder(app, AppDatabase::class.java, "database-name").build()
-    private val messageDao = db.messageDao()
-    private val chatDao = db.chatDao()
 
-    fun emulateMessageReceive(count: Int) {
+    private val mutableState = MutableStateFlow(ChatPresetScreenState())
+    val state = mutableState
+    private val channel = Channel<PresetChatAction>()
+    val actions = channel.receiveAsFlow()
+
+    init {
+        db.chatDao()
+            .getAllChatsFlow()
+            .onEach {
+                val chat = it.firstOrNull()
+                val value = if (chat == null) {
+                    state.first().copy(
+                        buttons = listOf(
+                            ButtonItem(
+                                text = "Создать чат",
+                                onClick = ::createChat
+                            ),
+                        )
+                    )
+                } else {
+                    state.first().copy(
+                        buttons = listOf(
+                            ButtonItem(
+                                text = "Отметить все сообщения прочитанными",
+                                onClick = ::allMessagesWatched
+                            ),
+                            ButtonItem(
+                                text = "Получить 10 сообщений",
+                                onClick = ::emulateMessageReceive
+                            ),
+                            ButtonItem(
+                                text = "Открыть чат",
+                                onClick = {
+                                    viewModelScope.launch {
+                                        channel.send(
+                                            PresetChatAction.NavigateTo(
+                                                ChatDestination(
+                                                    chat.id
+                                                )
+                                            )
+                                        )
+                                    }
+                                }
+                            )
+                        )
+                    )
+                }
+                mutableState.emit(value)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun emulateMessageReceive() {
         viewModelScope.launch {
             val currentTimeMillis = System.currentTimeMillis()
 
-            val incomeMessages = (0 until count).map {
+            val incomeMessages = (0 until 10).map {
                 MessageDatabaseEntity(
                     id = (currentTimeMillis + it).toString(),
                     chatId = CHAT_ID,
@@ -32,21 +88,21 @@ class ChatPresetViewModel(
                     isWatched = false
                 )
             }
-            chatDao.updateFirstUnread(CHAT_ID, incomeMessages.last().id)
-            messageDao.update(incomeMessages)
+            db.chatDao().updateFirstUnread(CHAT_ID, incomeMessages.last().id)
+            db.messageDao().update(incomeMessages)
         }
     }
 
     fun allMessagesWatched() {
         viewModelScope.launch {
-            chatDao.updateFirstUnread(CHAT_ID, "")
-            messageDao.markAsWatched()
+            db.chatDao().updateFirstUnread(CHAT_ID, "")
+            db.messageDao().markAsWatched()
         }
     }
 
     fun createChat() {
         viewModelScope.launch {
-            chatDao.update(
+            db.chatDao().update(
                 ChatDatabaseEntity(
                     id = CHAT_ID,
                     firstUnreadMessageId = ""

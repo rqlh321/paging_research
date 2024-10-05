@@ -1,23 +1,32 @@
 package com.example.paging_reserch.screen.preset
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.paging_reserch.screen.Destination
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun ChatPresetsScreen(
-    toChat: () -> Unit = {}
+    navigateToDestination: (Destination) -> Unit = {}
 ) {
     val viewModel = viewModel<ChatPresetViewModel>()
+    val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.actions
+            .onEach {
+                when (it) {
+                    is PresetChatAction.NavigateTo -> navigateToDestination(it.destination)
+                }
+            }
+            .collect()
+    }
 
     Column {
-        Button({ viewModel.createChat() }) { Text("Создать чат") }
-        Button({ viewModel.allMessagesWatched() }) { Text("Отметить все сообщения прочитанными") }
-        Button({ viewModel.emulateMessageReceive(1) }) { Text("Получить сообщение") }
-        Button({ viewModel.emulateMessageReceive(10) }) { Text("Получить 10 сообщений") }
-        Button({ viewModel.emulateMessageReceive(100) }) { Text("Получить 100 сообщений") }
-        Button(toChat) { Text("Открыть чат") }
+        state.buttons.forEach { ButtonComposable(it) }
     }
 }

@@ -8,12 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
@@ -25,7 +20,6 @@ import com.example.paging_reserch.screen.chat.compose.InitialPageLoading
 import com.example.paging_reserch.screen.chat.compose.LoadingError
 import com.example.paging_reserch.screen.chat.compose.Message
 import com.example.paging_reserch.screen.chat.compose.NextPageLoading
-import kotlinx.coroutines.delay
 
 @Composable
 fun ChatScreen() {
@@ -43,23 +37,11 @@ private fun ChatScreenContent(
     pager: LazyPagingItems<MessageItem>,
     onMessageClick: (MessageItem) -> Unit = {},
 ) {
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                println(delta)
-                // called when you scroll the content
-                return Offset.Zero
-            }
-        }
-    }
     val listState = rememberLazyListState()
 
     if (pager.itemCount > 0) {
         LaunchedEffect(Unit) {
-//            delay(100)
-            val index = pager.itemSnapshotList.items
-                .indexOfFirst { it.type == Const.NEW_DIVIDER } - 1
+            val index = pager.itemSnapshotList.items.indexOfFirst { it.type == Const.NEW_DIVIDER } - 1
             if (index > 0) {
                 listState.scrollToItem(index)
             }
@@ -70,7 +52,6 @@ private fun ChatScreenContent(
         modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
-            modifier = Modifier.nestedScroll(nestedScrollConnection),
             reverseLayout = true,
             state = listState,
             verticalArrangement = Arrangement.spacedBy(8.dp),
