@@ -54,13 +54,21 @@ android {
     }
 }
 dependencies {
+    implementation project(":common-data")
 
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.activity.compose
     implementation libs.androidx.navigation.compose
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.logging)
+    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.content.negoteation)
+
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.ui
