@@ -8,7 +8,9 @@ import androidx.room.Room
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.ChatDatabaseEntity
 import com.example.paging_reserch.database.MessageDatabaseEntity
+import com.example.paging_reserch.network.ServerApi
 import com.example.paging_reserch.screen.chat.ChatDestination
+import io.ktor.client.engine.android.Android
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -28,6 +30,8 @@ class ChatPresetViewModel(
     val state = mutableState
     private val channel = Channel<PresetChatAction>()
     val actions = channel.receiveAsFlow()
+
+    val api = ServerApi()
 
     init {
         db.chatDao()

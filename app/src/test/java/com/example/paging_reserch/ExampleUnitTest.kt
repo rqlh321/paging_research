@@ -1,6 +1,6 @@
 package com.example.paging_reserch
 
-import com.example.paging_reserch.network.ChatApi
+import com.example.paging_reserch.network.ServerApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -13,9 +13,9 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         runBlocking {
-            val api = ChatApi()
-            val chats = api.chats()
-            println(chats)
+            val api = ServerApi()
+//            println(api.createChat("new"))
+            println(api.getAllChats())
         }
     }
 }
