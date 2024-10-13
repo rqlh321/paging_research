@@ -11,7 +11,7 @@ import ru.gubatenko.common.MessagesRout
 
 class MessageApi {
 
-    suspend fun all(
+    suspend fun messages(
         rout: MessagesRout
     ) = httpClient.get(rout)
         .body<List<Message>>()

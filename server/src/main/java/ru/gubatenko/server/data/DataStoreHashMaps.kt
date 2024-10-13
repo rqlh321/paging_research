@@ -49,6 +49,19 @@ class DataStoreHashMaps : DataStore() {
     }
 
     override fun messages(rout: MessagesRout): List<Message> {
-        return messages[rout.chatId]?.values.orEmpty().toList()
+        val allMessages = messages[rout.chatId]?.values.orEmpty().toList()
+            .sortedBy { it.timestamp }
+            .let { if (rout.isDirectionToLatest) it else it.reversed() }
+        val index = allMessages.indexOfFirst { it.id == rout.messageId }
+        val range = if (index == -1) {
+            val endInclusive = rout.limit.toInt() - 1
+
+            IntRange(0, if (endInclusive>allMessages.lastIndex)allMessages.lastIndex else endInclusive)
+        } else {
+            val endInclusive = index + rout.limit.toInt()
+
+            IntRange(index + 1, if (endInclusive>allMessages.lastIndex)allMessages.lastIndex else endInclusive)
+        }
+        return allMessages.slice(range)
     }
 }

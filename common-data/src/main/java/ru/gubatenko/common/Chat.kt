@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @JvmInline
 @Serializable
-value class ChatId(private val value: String)
+value class ChatId(val value: String)
 
 @Resource(ApiRouts.CHATS)
 data object ChatRout

@@ -5,13 +5,16 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.example.paging_reserch.screen.chat.ChatViewModel
 import com.example.paging_reserch.database.AppDatabase
 import com.example.paging_reserch.database.MessageDao
 import com.example.paging_reserch.database.MessageDatabaseEntity
 import com.example.paging_reserch.database.RemoteKeyDao
 import com.example.paging_reserch.database.RemoteKeyDatabaseEntity
-import com.example.paging_reserch.network.MessagesServiceApi
+import com.example.paging_reserch.screen.chat.ChatViewModel
+import ru.gubatenko.common.ChatId
+import ru.gubatenko.common.MessageId
+import ru.gubatenko.common.MessagesRout
+import ru.gubatenko.server_api.MessageApi
 
 @OptIn(ExperimentalPagingApi::class)
 class MessageRemoteMediator(
@@ -19,7 +22,7 @@ class MessageRemoteMediator(
     private val database: AppDatabase,
     private val messageDao: MessageDao,
     private val remoteKeyDao: RemoteKeyDao,
-    private val messageService: MessagesServiceApi,
+    private val api: MessageApi,
 ) : RemoteMediator<Int, MessageDatabaseEntity>() {
 
     override suspend fun load(
@@ -38,11 +41,12 @@ class MessageRemoteMediator(
     private suspend fun refresh(): MediatorResult {
         val remoteKey = remoteKeyDao.remoteKey(chatId)
         if (remoteKey == null) {
-            val initialKey: Long = System.currentTimeMillis()
-            val response = messageService.messages(
-                borderPosition = initialKey,
-                isDirectionToLatest = true,
-                limit = ChatViewModel.INIT_SIZE
+            val response = api.messages(
+                MessagesRout(
+                    chatId = ChatId(chatId),
+                    isDirectionToLatest = true,
+                    limit = ChatViewModel.INIT_SIZE.toLong()
+                )
             )
 
             val messageEntities = response.map {
@@ -50,7 +54,6 @@ class MessageRemoteMediator(
                     chatId = chatId,
                     id = it.timestamp.toString(),
                     timestamp = it.timestamp,
-                    isWatched = true
                 )
             }
             val appendKey = messageEntities.lastOrNull()?.id
@@ -69,10 +72,13 @@ class MessageRemoteMediator(
 
     private suspend fun prepend(): MediatorResult {
         val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.prependKey?.let {
-            val response = messageService.messages(
-                borderPosition = it.toLong(),
-                isDirectionToLatest = false,
-                limit = ChatViewModel.INIT_SIZE
+            val response = api.messages(
+                MessagesRout(
+                    chatId = ChatId(chatId),
+                    messageId = MessageId(it),
+                    isDirectionToLatest = false,
+                    limit = ChatViewModel.INIT_SIZE.toLong()
+                )
             )
 
             val messageEntities = response.map {
@@ -80,7 +86,6 @@ class MessageRemoteMediator(
                     chatId = chatId,
                     id = it.timestamp.toString(),
                     timestamp = it.timestamp,
-                    isWatched = true
                 )
             }
             val prependKey = messageEntities.lastOrNull()?.id
@@ -97,10 +102,13 @@ class MessageRemoteMediator(
 
     private suspend fun append(): MediatorResult {
         val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.appendKey?.let {
-            val response = messageService.messages(
-                borderPosition = it.toLong(),
-                isDirectionToLatest = true,
-                limit = ChatViewModel.INIT_SIZE
+            val response = api.messages(
+                MessagesRout(
+                    chatId = ChatId(chatId),
+                    messageId = MessageId(it),
+                    isDirectionToLatest = true,
+                    limit = ChatViewModel.INIT_SIZE.toLong()
+                )
             )
 
             val messageEntities = response.map {
@@ -108,7 +116,6 @@ class MessageRemoteMediator(
                     chatId = chatId,
                     id = it.timestamp.toString(),
                     timestamp = it.timestamp,
-                    isWatched = true
                 )
             }
             val appendKey = messageEntities.lastOrNull()?.id

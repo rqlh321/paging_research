@@ -15,4 +15,3 @@ fun Routing.chats(
     get<ChatRout> { call.respond(dataStore.chats()) }
     post<CreateChatRout, CreateChatBody> { _, body -> call.respond(dataStore.createChat(body)) }
 }
-

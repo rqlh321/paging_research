@@ -47,7 +47,7 @@ fun Message(
             Text(
                 modifier = Modifier
                     .clip(item.corners)
-                    .background(if (item.isWatched) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.secondary)
                     .fillMaxWidth()
                     .height(100.dp)
                     .clickable { click(item) }

@@ -13,7 +13,6 @@ data class MessageDatabaseEntity(
     @ColumnInfo(name = MESSAGE_ID) val id: String,
     @ColumnInfo(name = TIMESTAMP) val timestamp: Long,
     @ColumnInfo(name = CHAT_ID) val chatId: String,
-    @ColumnInfo(name = IS_WATCHED) val isWatched: Boolean,
 ) {
     companion object {
         const val TABLE_NAME = "message"
@@ -21,6 +20,5 @@ data class MessageDatabaseEntity(
         const val MESSAGE_ID = "message_id"
         const val TIMESTAMP = "timestamp"
         const val CHAT_ID = "chat_id"
-        const val IS_WATCHED = "is_watched"
     }
 }

@@ -29,7 +29,6 @@ data class TextMessageItem(
     override val id: String,
     val date: String,
     val time: String,
-    val isWatched: Boolean,
 ) : MessageItem() {
     override val type = Const.MESSAGE
     val corners = Const.NOT_MY_MESSAGE_CORNERS
@@ -38,7 +37,6 @@ data class TextMessageItem(
         id = entity.id,
         date = Const.date.format(entity.timestamp),
         time = Const.time.format(entity.timestamp),
-        isWatched = entity.isWatched
     )
 
 }

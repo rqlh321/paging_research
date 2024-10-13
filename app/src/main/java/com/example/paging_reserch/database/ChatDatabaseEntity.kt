@@ -11,12 +11,10 @@ import com.example.paging_reserch.database.ChatDatabaseEntity.Companion.TABLE_NA
 )
 data class ChatDatabaseEntity(
     @ColumnInfo(name = CHAT_ID) val id: String,
-    @ColumnInfo(name = FIRST_UNREAD_MESSAGE_ID) val firstUnreadMessageId: String,
 ) {
     companion object {
         const val TABLE_NAME = "chat"
 
         const val CHAT_ID = "chat_id"
-        const val FIRST_UNREAD_MESSAGE_ID = "first_unread_message_id"
     }
 }

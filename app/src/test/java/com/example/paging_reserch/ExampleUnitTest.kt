@@ -24,7 +24,7 @@ class ExampleUnitTest {
             println(chatId)
             val message = messageApi.create(CreateMessageBody(chatId, "hola"))
             println(message)
-            val messages = messageApi.all(
+            val messages = messageApi.messages(
                 MessagesRout(
                     chatId = chatId,
                     messageId = null,
