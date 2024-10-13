@@ -10,6 +10,12 @@ value class MessageId(private val value: String)
 @Resource(ApiRouts.MESSAGES)
 data class MessagesRout(val chatId: ChatId)
 
+@Serializable
+data class CreateMessageBody(
+    val chatId: ChatId,
+    val text: String
+)
+
 @Resource(ApiRouts.MESSAGES)
 data object CreateMessageRout
 

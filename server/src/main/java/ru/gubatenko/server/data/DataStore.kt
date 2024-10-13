@@ -6,7 +6,6 @@ import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
-import ru.gubatenko.common.Response
 import java.util.UUID
 
 class DataStore {
@@ -14,17 +13,17 @@ class DataStore {
     private val chats = hashMapOf<ChatId, Chat>()
     private val messages = hashMapOf<ChatId, HashMap<MessageId, Message>>()
 
-    fun createChat(body: CreateChatBody): Response<ChatId> {
+    fun createChat(body: CreateChatBody): ChatId {
         val id = ChatId(UUID.randomUUID().toString())
         chats[id] = Chat(id, body.name)
-        return Response(id)
+        return id
     }
 
-    fun chats(): Response<List<Chat>> {
-        return Response(chats.values.toList())
+    fun chats(): List<Chat> {
+        return chats.values.toList()
     }
 
-    fun createMessage(body: CreateMessageBody): Response<MessageId> {
+    fun createMessage(body: CreateMessageBody): MessageId {
         val chatId = body.chatId
         val text = body.text
 
@@ -39,13 +38,13 @@ class DataStore {
             } else {
                 messages[chatId] = hashMapOf(messageId to message)
             }
-            return Response(messageId)
+            return messageId
         } else {
             error("chat is missing")
         }
     }
 
-    fun messages(chatId: ChatId): Response<List<Message>> {
-        return Response(messages[chatId]?.values.orEmpty().toList())
+    fun messages(chatId: ChatId): List<Message> {
+        return messages[chatId]?.values.orEmpty().toList()
     }
 }

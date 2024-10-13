@@ -10,6 +10,9 @@ value class ChatId(private val value: String)
 @Resource(ApiRouts.CHATS)
 data object ChatRout
 
+@Serializable
+data class CreateChatBody(val name: String)
+
 @Resource(ApiRouts.CHATS)
 data object CreateChatRout
 

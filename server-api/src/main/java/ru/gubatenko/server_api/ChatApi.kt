@@ -9,21 +9,18 @@ import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.ChatRout
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateChatRout
-import ru.gubatenko.common.Response
 
 class ChatApi {
 
     suspend fun all(
         rout: ChatRout = ChatRout
     ) = httpClient.get(rout)
-        .body<Response<List<Chat>>>()
-        .result
+        .body<List<Chat>>()
 
     suspend fun create(
         body: CreateChatBody,
         rout: CreateChatRout = CreateChatRout
     ) = httpClient.post(rout) { setBody(body) }
-        .body<Response<ChatId>>()
-        .result
+        .body<ChatId>()
 
 }
