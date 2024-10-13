@@ -54,7 +54,7 @@ android {
     }
 }
 dependencies {
-    implementation project(":server-api")
+    implementation project(':common-api')
     implementation project(":common-data")
 
     implementation libs.kotlinx.serialization.json
