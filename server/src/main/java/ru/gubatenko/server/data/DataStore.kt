@@ -45,7 +45,7 @@ class DataStore {
         }
     }
 
-    fun messages(chatId: ChatId): Result<List<Message>> {
-        return Result.success(messages[chatId]?.values.orEmpty().toList())
+    fun messages(chatId: ChatId): Response<List<Message>> {
+        return Response(messages[chatId]?.values.orEmpty().toList())
     }
 }

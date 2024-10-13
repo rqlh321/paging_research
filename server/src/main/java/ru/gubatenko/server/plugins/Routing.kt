@@ -1,13 +1,11 @@
 package ru.gubatenko.server.plugins
 
-import io.ktor.resources.Resource
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.resources.Resources
 import io.ktor.server.routing.routing
-import ru.gubatenko.common.ChatId
 import ru.gubatenko.server.data.DataStore
 
 fun Application.configureRouting(dataStore: DataStore) {

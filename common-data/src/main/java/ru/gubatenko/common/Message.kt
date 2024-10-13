@@ -1,6 +1,17 @@
 package ru.gubatenko.common
 
+import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable
+
+@JvmInline
+@Serializable
+value class MessageId(private val value: String)
+
+@Resource(ApiRouts.MESSAGES)
+data class MessagesRout(val chatId: ChatId)
+
+@Resource(ApiRouts.MESSAGES)
+data object CreateMessageRout
 
 @Serializable
 data class Message(
