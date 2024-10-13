@@ -12,15 +12,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import androidx.room.Room
-import com.example.paging_reserch.database.AppDatabase
+import com.example.paging_reserch.App
 import com.example.paging_reserch.paging.MessageRemoteMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import ru.gubatenko.server_api.MessageApi
 
 class ChatViewModel(
     app: Application,
@@ -29,10 +27,6 @@ class ChatViewModel(
 
     private val args = savedStateHandle.toRoute<ChatDestination>()
 
-    private val db = Room.databaseBuilder(app, AppDatabase::class.java, "database-name").build()
-    private val api = MessageApi()
-    private val messageDao = db.messageDao()
-    private val remoteKeyDao = db.remoteKeyDao()
     private val clickedMessageIdFlow = MutableStateFlow("")
 
     @OptIn(ExperimentalPagingApi::class)
@@ -45,12 +39,9 @@ class ChatViewModel(
         ),
         remoteMediator = MessageRemoteMediator(
             chatId = args.id,
-            database = db,
-            messageDao = messageDao,
-            api = api,
-            remoteKeyDao = remoteKeyDao,
+            repo = App.messageRepo,
         ),
-    ) { messageDao.read() }
+    ) { App.db.pageDao().read() }
 
     val pagingDataFlow: Flow<PagingData<MessageItem>> = combine(
         pager.flow

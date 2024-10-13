@@ -4,9 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
-import com.example.paging_reserch.database.AppDatabase
-import com.example.paging_reserch.database.ChatDatabaseEntity
+import com.example.paging_reserch.App
 import com.example.paging_reserch.screen.chat.ChatDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,26 +13,20 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import ru.gubatenko.common.CreateChatBody
-import ru.gubatenko.server_api.ChatApi
 
 class ChatPresetViewModel(
     app: Application,
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-    private val db = Room.databaseBuilder(app, AppDatabase::class.java, "database-name").build()
-
     private val mutableState = MutableStateFlow(ChatPresetScreenState())
     val state = mutableState
     private val channel = Channel<PresetChatAction>()
     val actions = channel.receiveAsFlow()
 
-    private val api = ChatApi()
 
     init {
-        db.chatDao()
-            .getAllChatsFlow()
+        App.chatRepo.chats()
             .onEach {
                 val chat = it.firstOrNull()
                 val buttons = if (chat == null) {
@@ -98,8 +90,7 @@ class ChatPresetViewModel(
 
     fun createChat() {
         viewModelScope.launch {
-            val chat = api.create(CreateChatBody("test"))
-            db.chatDao().upsert(ChatDatabaseEntity(id = chat.id.value))
+            App.chatRepo.create("test")
         }
     }
 }

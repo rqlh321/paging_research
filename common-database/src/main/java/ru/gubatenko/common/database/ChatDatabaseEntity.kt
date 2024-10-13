@@ -1,4 +1,4 @@
-package com.example.paging_reserch.database
+package ru.gubatenko.common.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

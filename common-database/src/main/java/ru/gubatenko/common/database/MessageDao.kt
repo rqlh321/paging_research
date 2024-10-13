@@ -1,6 +1,5 @@
-package com.example.paging_reserch.database
+package ru.gubatenko.common.database
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,9 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface MessageDao {
-    @Query("SELECT * FROM messagedatabaseentity ORDER BY timestamp DESC")
-    fun read(): PagingSource<Int, MessageDatabaseEntity>
-
     @Query("SELECT * FROM messagedatabaseentity ORDER BY timestamp DESC")
     suspend fun readList(): List<MessageDatabaseEntity>
 

@@ -11,7 +11,7 @@ import ru.gubatenko.common.CreateChatRout
 
 class ChatApi {
 
-    suspend fun all(
+    suspend fun chats(
         rout: ChatRout = ChatRout
     ) = httpClient.get(rout)
         .body<List<Chat>>()

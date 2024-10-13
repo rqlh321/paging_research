@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.paging_reserch.database.AppDatabase
-import com.example.paging_reserch.database.MessageDatabaseEntity
+import ru.gubatenko.common.database.MessageDatabaseEntity
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
