@@ -2,6 +2,8 @@ package ru.gubatenko.server.data
 
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatId
+import ru.gubatenko.common.CreateChatBody
+import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.Response
@@ -12,9 +14,9 @@ class DataStore {
     private val chats = hashMapOf<ChatId, Chat>()
     private val messages = hashMapOf<ChatId, HashMap<MessageId, Message>>()
 
-    fun createChat(name: String): Response<ChatId> {
+    fun createChat(body: CreateChatBody): Response<ChatId> {
         val id = ChatId(UUID.randomUUID().toString())
-        chats[id] = Chat(id, name)
+        chats[id] = Chat(id, body.name)
         return Response(id)
     }
 
@@ -22,7 +24,10 @@ class DataStore {
         return Response(chats.values.toList())
     }
 
-    fun createMessage(chatId: ChatId, text: String): Response<MessageId> {
+    fun createMessage(body: CreateMessageBody): Response<MessageId> {
+        val chatId = body.chatId
+        val text = body.text
+
         if (chats.containsKey(chatId)) {
             val messageId = MessageId(UUID.randomUUID().toString())
             val message = Message(

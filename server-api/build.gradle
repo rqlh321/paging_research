@@ -9,5 +9,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 dependencies {
+    implementation project(":common-data")
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.logging)
     implementation(libs.ktor.serialization)
+    implementation(libs.ktor.content.negoteation)
 }

@@ -16,3 +16,4 @@ rootProject.name = "paging_reserch"
 include ':app'
 include ':server'
 include ':common-data'
+include ':server-api'
