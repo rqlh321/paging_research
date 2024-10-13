@@ -7,7 +7,6 @@ import io.ktor.client.request.setBody
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.CreateMessageRout
 import ru.gubatenko.common.Message
-import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.MessagesRout
 
 class MessageApi {
@@ -21,6 +20,6 @@ class MessageApi {
         body: CreateMessageBody,
         rout: CreateMessageRout = CreateMessageRout
     ) = httpClient.post(rout) { setBody(body) }
-        .body<MessageId>()
+        .body<Message>()
 
 }

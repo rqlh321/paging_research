@@ -12,7 +12,7 @@ import ru.gubatenko.server.data.DataStore
 fun Routing.messages(
     dataStore: DataStore
 ) {
-    get<MessagesRout> { call.respond(dataStore.messages(it.chatId)) }
+    get<MessagesRout> { call.respond(dataStore.messages(it)) }
 
     post<CreateMessageRout, CreateMessageBody> { _, body ->
         call.respond(dataStore.createMessage(body))

@@ -8,7 +8,12 @@ import kotlinx.serialization.Serializable
 value class MessageId(private val value: String)
 
 @Resource(ApiRouts.MESSAGES)
-data class MessagesRout(val chatId: ChatId)
+data class MessagesRout(
+    val chatId: ChatId,
+    val messageId: MessageId? = null,
+    val isDirectionToLatest: Boolean,
+    val limit: Long
+)
 
 @Serializable
 data class CreateMessageBody(
@@ -22,5 +27,6 @@ data object CreateMessageRout
 @Serializable
 data class Message(
     val id: MessageId,
+    val timestamp: Long,
     val text: String
 )

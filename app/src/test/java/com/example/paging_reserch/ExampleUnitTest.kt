@@ -20,10 +20,18 @@ class ExampleUnitTest {
             val chatApi = ChatApi()
             val messageApi = MessageApi()
 
-            val chatId = chatApi.create(CreateChatBody("new"))
+            val chatId = chatApi.create(CreateChatBody("new")).id
             println(chatId)
-            messageApi.create(CreateMessageBody(chatId, "hola"))
-            val messages = messageApi.all(MessagesRout(chatId))
+            val message = messageApi.create(CreateMessageBody(chatId, "hola"))
+            println(message)
+            val messages = messageApi.all(
+                MessagesRout(
+                    chatId = chatId,
+                    messageId = null,
+                    isDirectionToLatest = false,
+                    limit = 100
+                )
+            )
 
             println(messages)
         }
