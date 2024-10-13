@@ -1,24 +1,11 @@
 package com.example.paging_reserch.database
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.example.paging_reserch.database.MessageDatabaseEntity.Companion.MESSAGE_ID
-import com.example.paging_reserch.database.MessageDatabaseEntity.Companion.TABLE_NAME
+import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = TABLE_NAME,
-    primaryKeys = [MESSAGE_ID]
-)
+@Entity
 data class MessageDatabaseEntity(
-    @ColumnInfo(name = MESSAGE_ID) val id: String,
-    @ColumnInfo(name = TIMESTAMP) val timestamp: Long,
-    @ColumnInfo(name = CHAT_ID) val chatId: String,
-) {
-    companion object {
-        const val TABLE_NAME = "message"
-
-        const val MESSAGE_ID = "message_id"
-        const val TIMESTAMP = "timestamp"
-        const val CHAT_ID = "chat_id"
-    }
-}
+    @PrimaryKey val messageId: String,
+    val timestamp: Long,
+    val chatId: String,
+)

@@ -8,14 +8,16 @@ import androidx.room.Upsert
 interface RemoteKeyDao {
     @Upsert
     suspend fun update(remoteKey: RemoteKeyDatabaseEntity)
-    @Query("UPDATE messages_remote_key SET prepend_key = :key WHERE chat_id == :chatId")
+
+    @Query("UPDATE remotekeydatabaseentity SET prependKey = :key WHERE chatId == :chatId")
     suspend fun updatePrepend(chatId: String, key: String?)
-    @Query("UPDATE messages_remote_key SET append_key = :key WHERE chat_id == :chatId")
+
+    @Query("UPDATE remotekeydatabaseentity SET appendKey = :key WHERE chatId == :chatId")
     suspend fun updateAppend(chatId: String, key: String?)
 
-    @Query("SELECT * FROM ${RemoteKeyDatabaseEntity.TABLE_NAME} WHERE ${RemoteKeyDatabaseEntity.CHAT_ID} = :chatId")
+    @Query("SELECT * FROM remotekeydatabaseentity WHERE chatId = :chatId")
     suspend fun remoteKey(chatId: String): RemoteKeyDatabaseEntity?
 
-    @Query("DELETE FROM ${RemoteKeyDatabaseEntity.TABLE_NAME} WHERE ${RemoteKeyDatabaseEntity.CHAT_ID} = :chatId")
+    @Query("DELETE FROM remotekeydatabaseentity WHERE chatId = :chatId")
     suspend fun delete(chatId: String)
 }

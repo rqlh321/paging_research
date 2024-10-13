@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChatDao {
     @Upsert
-    suspend fun update(entity: ChatDatabaseEntity)
+    suspend fun upsert(entity: ChatDatabaseEntity)
 
-    @Query("SELECT * FROM ${ChatDatabaseEntity.TABLE_NAME} WHERE ${ChatDatabaseEntity.CHAT_ID} = :chatId")
-    suspend fun get(chatId: String): ChatDatabaseEntity
+    @Upsert
+    suspend fun upsert(entities: List<ChatDatabaseEntity>)
 
-    @Query("SELECT * FROM ${ChatDatabaseEntity.TABLE_NAME}")
+    @Query("SELECT * FROM chatdatabaseentity")
     fun getAllChatsFlow(): Flow<List<ChatDatabaseEntity>>
 
 }

@@ -52,11 +52,11 @@ class MessageRemoteMediator(
             val messageEntities = response.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
-                    id = it.timestamp.toString(),
+                    messageId = it.id.value,
                     timestamp = it.timestamp,
                 )
             }
-            val appendKey = messageEntities.lastOrNull()?.id
+            val appendKey = messageEntities.lastOrNull()?.messageId
             val remoteKeyEntity = RemoteKeyDatabaseEntity(
                 chatId = chatId,
                 prependKey = null,
@@ -84,11 +84,11 @@ class MessageRemoteMediator(
             val messageEntities = response.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
-                    id = it.timestamp.toString(),
+                    messageId = it.id.value,
                     timestamp = it.timestamp,
                 )
             }
-            val prependKey = messageEntities.lastOrNull()?.id
+            val prependKey = messageEntities.lastOrNull()?.messageId
             database.withTransaction {
                 remoteKeyDao.updatePrepend(chatId, prependKey)
                 messageDao.update(messageEntities)
@@ -114,11 +114,11 @@ class MessageRemoteMediator(
             val messageEntities = response.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
-                    id = it.timestamp.toString(),
+                    messageId = it.id.value,
                     timestamp = it.timestamp,
                 )
             }
-            val appendKey = messageEntities.lastOrNull()?.id
+            val appendKey = messageEntities.lastOrNull()?.messageId
             database.withTransaction {
                 remoteKeyDao.updateAppend(chatId, appendKey)
                 messageDao.update(messageEntities)

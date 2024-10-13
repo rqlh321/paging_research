@@ -99,7 +99,7 @@ class ChatPresetViewModel(
     fun createChat() {
         viewModelScope.launch {
             val chat = api.create(CreateChatBody("test"))
-            db.chatDao().update(ChatDatabaseEntity(id = chat.id.value))
+            db.chatDao().upsert(ChatDatabaseEntity(id = chat.id.value))
         }
     }
 }

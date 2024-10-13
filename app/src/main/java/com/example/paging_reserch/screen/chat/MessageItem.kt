@@ -34,7 +34,7 @@ data class TextMessageItem(
     val corners = Const.NOT_MY_MESSAGE_CORNERS
 
     constructor(entity: MessageDatabaseEntity) : this(
-        id = entity.id,
+        id = entity.messageId,
         date = Const.date.format(entity.timestamp),
         time = Const.time.format(entity.timestamp),
     )
