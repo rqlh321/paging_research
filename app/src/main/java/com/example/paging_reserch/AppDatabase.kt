@@ -1,4 +1,4 @@
-package com.example.paging_reserch.database
+package com.example.paging_reserch
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -21,5 +21,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun chatDao(): ChatDao
     abstract fun messageDao(): MessageDao
     abstract fun remoteKeyDao(): RemoteKeyDao
-    abstract fun pageDao(): PageDao
 }

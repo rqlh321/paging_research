@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.jetbrains.kotlin.kapt)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools.ksp)
 }
 
 android {
@@ -54,8 +54,6 @@ android {
     }
 }
 dependencies {
-    implementation project(':common-api')
-    implementation project(":common-data")
     implementation project(":common-database")
     implementation project(":common-repo")
 
@@ -75,12 +73,8 @@ dependencies {
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
 
-    implementation "androidx.paging:paging-runtime-ktx:3.3.2"
-    implementation "androidx.paging:paging-compose:3.3.2"
-
     implementation libs.androidx.room.ktx
-    implementation libs.androidx.room.paging
-    kapt libs.androidx.room.compiler
+    ksp libs.androidx.room.compiler
 
     testImplementation libs.junit
 

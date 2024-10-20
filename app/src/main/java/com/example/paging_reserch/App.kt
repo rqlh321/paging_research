@@ -2,7 +2,6 @@ package com.example.paging_reserch
 
 import android.app.Application
 import androidx.room.Room
-import com.example.paging_reserch.database.AppDatabase
 import ru.gubatenko.common.repo.ChatRepo
 import ru.gubatenko.common.repo.MessageRepo
 

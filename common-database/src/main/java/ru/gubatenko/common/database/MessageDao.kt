@@ -4,11 +4,12 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MessageDao {
     @Query("SELECT * FROM messagedatabaseentity ORDER BY timestamp DESC")
-    suspend fun readList(): List<MessageDatabaseEntity>
+    fun read(): Flow<List<MessageDatabaseEntity>>
 
     @Query("SELECT messageId FROM messagedatabaseentity ORDER BY messageId LIMIT 1")
     suspend fun earliestPosition(): String

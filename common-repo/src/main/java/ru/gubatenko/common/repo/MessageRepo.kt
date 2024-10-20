@@ -1,5 +1,7 @@
 package ru.gubatenko.common.repo
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.MessagesRout
@@ -15,7 +17,7 @@ class MessageRepo(
 ) {
     private val api: MessageApi = MessageApi()
 
-    suspend fun refresh(chatId: String): Boolean {
+    suspend fun refresh(chatId: String): Boolean = withContext(Dispatchers.IO) {
         val remoteKey = remoteKeyDao.remoteKey(chatId)
         if (remoteKey == null) {
             val response = api.messages(
@@ -42,10 +44,10 @@ class MessageRepo(
             remoteKeyDao.update(remoteKeyEntity)
             messageDao.update(messageEntities)
         }
-        return true
+        true
     }
 
-    suspend fun prepend(chatId: String): Boolean {
+    suspend fun prepend(chatId: String): Boolean = withContext(Dispatchers.IO) {
         val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.prependKey?.let {
             val response = api.messages(
                 MessagesRout(
@@ -68,10 +70,10 @@ class MessageRepo(
             messageDao.update(messageEntities)
             response.size < INIT_SIZE
         } ?: true
-        return endOfPaginationReached
+        endOfPaginationReached
     }
 
-    suspend fun append(chatId: String): Boolean {
+    suspend fun append(chatId: String): Boolean = withContext(Dispatchers.IO) {
         val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.appendKey?.let {
             val response = api.messages(
                 MessagesRout(
@@ -94,7 +96,7 @@ class MessageRepo(
             messageDao.update(messageEntities)
             response.size < INIT_SIZE
         } ?: true
-        return endOfPaginationReached
+        endOfPaginationReached
     }
 
     companion object {

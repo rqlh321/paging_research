@@ -21,9 +21,9 @@ class ChatPresetViewModel(
 
     private val mutableState = MutableStateFlow(ChatPresetScreenState())
     val state = mutableState
+
     private val channel = Channel<PresetChatAction>()
     val actions = channel.receiveAsFlow()
-
 
     init {
         App.chatRepo.chats()
@@ -33,26 +33,20 @@ class ChatPresetViewModel(
                     listOf(
                         ButtonItem(
                             text = "Создать чат",
-                            onClick = ::createChat
+                            onClick = {
+                                viewModelScope.launch {
+                                    App.chatRepo.create("test")
+                                }
+                            }
                         )
                     )
                 } else {
                     listOf(
                         ButtonItem(
-                            text = "Отметить все сообщения прочитанными",
-                            onClick = ::allMessagesWatched
-                        ),
-                        ButtonItem(
-                            text = "Получить 10 сообщений",
-                            onClick = ::emulateMessageReceive
-                        ),
-                        ButtonItem(
                             text = "Открыть чат",
                             onClick = {
                                 viewModelScope.launch {
-                                    channel.send(
-                                        PresetChatAction.NavigateTo(ChatDestination(chat.id))
-                                    )
+                                    channel.send(PresetChatAction.NavigateTo(ChatDestination(chat.id)))
                                 }
                             }
                         )
@@ -62,35 +56,5 @@ class ChatPresetViewModel(
                 mutableState.emit(state.first().copy(buttons = buttons))
             }
             .launchIn(viewModelScope)
-    }
-
-    fun emulateMessageReceive() {
-        viewModelScope.launch {
-//            val currentTimeMillis = System.currentTimeMillis()
-//
-//            val incomeMessages = (0 until 10).map {
-//                MessageDatabaseEntity(
-//                    id = (currentTimeMillis + it).toString(),
-//                    chatId = CHAT_ID,
-//                    timestamp = currentTimeMillis,
-//                    isWatched = false
-//                )
-//            }
-//            db.chatDao().updateFirstUnread(CHAT_ID, incomeMessages.last().id)
-//            db.messageDao().update(incomeMessages)
-        }
-    }
-
-    fun allMessagesWatched() {
-        viewModelScope.launch {
-//            db.chatDao().updateFirstUnread(CHAT_ID, "")
-//            db.messageDao().markAsWatched()
-        }
-    }
-
-    fun createChat() {
-        viewModelScope.launch {
-            App.chatRepo.create("test")
-        }
     }
 }
