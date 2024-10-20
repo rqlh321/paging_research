@@ -28,7 +28,7 @@ class MessageRepo(
                 )
             )
 
-            val messageEntities = response.map {
+            val messageEntities = response.items.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
                     messageId = it.id.value,
@@ -39,7 +39,7 @@ class MessageRepo(
             val remoteKeyEntity = RemoteKeyDatabaseEntity(
                 chatId = chatId,
                 prependKey = null,
-                appendKey = if (response.size < INIT_SIZE) null else appendKey
+                appendKey = if (response.items.size < INIT_SIZE) null else appendKey
             )
             remoteKeyDao.update(remoteKeyEntity)
             messageDao.update(messageEntities)
@@ -58,7 +58,7 @@ class MessageRepo(
                 )
             )
 
-            val messageEntities = response.map {
+            val messageEntities = response.items.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
                     messageId = it.id.value,
@@ -68,7 +68,7 @@ class MessageRepo(
             val prependKey = messageEntities.lastOrNull()?.messageId
             remoteKeyDao.updatePrepend(chatId, prependKey)
             messageDao.update(messageEntities)
-            response.size < INIT_SIZE
+            response.items.size < INIT_SIZE
         } ?: true
         endOfPaginationReached
     }
@@ -84,7 +84,7 @@ class MessageRepo(
                 )
             )
 
-            val messageEntities = response.map {
+            val messageEntities = response.items.map {
                 MessageDatabaseEntity(
                     chatId = chatId,
                     messageId = it.id.value,
@@ -94,7 +94,7 @@ class MessageRepo(
             val appendKey = messageEntities.lastOrNull()?.messageId
             remoteKeyDao.updateAppend(chatId, appendKey)
             messageDao.update(messageEntities)
-            response.size < INIT_SIZE
+            response.items.size < INIT_SIZE
         } ?: true
         endOfPaginationReached
     }

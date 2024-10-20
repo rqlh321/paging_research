@@ -7,6 +7,7 @@ import io.ktor.client.request.setBody
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.CreateMessageRout
 import ru.gubatenko.common.Message
+import ru.gubatenko.common.Messages
 import ru.gubatenko.common.MessagesRout
 
 class MessageApi {
@@ -14,7 +15,7 @@ class MessageApi {
     suspend fun messages(
         rout: MessagesRout
     ) = httpClient.get(rout)
-        .body<List<Message>>()
+        .body<Messages>()
 
     suspend fun create(
         body: CreateMessageBody,

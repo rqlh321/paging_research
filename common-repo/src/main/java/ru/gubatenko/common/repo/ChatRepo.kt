@@ -21,7 +21,7 @@ class ChatRepo(
 
     suspend fun update() = withContext(Dispatchers.IO) {
         val chats = api.chats()
-        val entities = chats.map { ChatDatabaseEntity(id = it.id.value) }
+        val entities = chats.items.map { ChatDatabaseEntity(id = it.id.value) }
         dao.upsert(entities)
     }
 

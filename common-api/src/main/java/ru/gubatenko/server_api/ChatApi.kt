@@ -6,6 +6,7 @@ import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.setBody
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatRout
+import ru.gubatenko.common.Chats
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateChatRout
 
@@ -14,7 +15,7 @@ class ChatApi {
     suspend fun chats(
         rout: ChatRout = ChatRout
     ) = httpClient.get(rout)
-        .body<List<Chat>>()
+        .body<Chats>()
 
     suspend fun create(
         body: CreateChatBody,

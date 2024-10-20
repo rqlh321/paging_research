@@ -1,15 +1,21 @@
 package ru.gubatenko.server.data
 
+import io.ktor.server.websocket.WebSocketServerSession
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatId
+import ru.gubatenko.common.Chats
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
+import ru.gubatenko.common.Messages
 import ru.gubatenko.common.MessagesRout
+import ru.gubatenko.common.UserId
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 class DataStoreHashMaps : DataStore() {
+    private val sessions = ConcurrentHashMap<UserId, WebSocketServerSession>()
 
     private val chats = hashMapOf<ChatId, Chat>()
     private val messages = hashMapOf<ChatId, HashMap<MessageId, Message>>()
@@ -21,8 +27,8 @@ class DataStoreHashMaps : DataStore() {
         return chat
     }
 
-    override fun chats(): List<Chat> {
-        return chats.values.toList()
+    override fun chats(): Chats {
+        return Chats(chats.values.toList())
     }
 
     override fun createMessage(body: CreateMessageBody): Message {
@@ -48,7 +54,7 @@ class DataStoreHashMaps : DataStore() {
         }
     }
 
-    override fun messages(rout: MessagesRout): List<Message> {
+    override fun messages(rout: MessagesRout): Messages {
         val allMessages = messages[rout.chatId]?.values.orEmpty().toList()
             .sortedBy { it.timestamp }
             .let { if (rout.isDirectionToLatest) it else it.reversed() }
@@ -56,12 +62,18 @@ class DataStoreHashMaps : DataStore() {
         val range = if (index == -1) {
             val endInclusive = rout.limit.toInt() - 1
 
-            IntRange(0, if (endInclusive>allMessages.lastIndex)allMessages.lastIndex else endInclusive)
+            IntRange(
+                0,
+                if (endInclusive > allMessages.lastIndex) allMessages.lastIndex else endInclusive
+            )
         } else {
             val endInclusive = index + rout.limit.toInt()
 
-            IntRange(index + 1, if (endInclusive>allMessages.lastIndex)allMessages.lastIndex else endInclusive)
+            IntRange(
+                index + 1,
+                if (endInclusive > allMessages.lastIndex) allMessages.lastIndex else endInclusive
+            )
         }
-        return allMessages.slice(range)
+        return Messages(allMessages.slice(range))
     }
 }

@@ -2,6 +2,7 @@ package ru.gubatenko.common
 
 import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 @JvmInline
 @Serializable
@@ -20,4 +21,16 @@ data object CreateChatRout
 data class Chat(
     val id: ChatId,
     val name: String
-)
+) : Response() {
+    companion object {
+        fun test() = Chat(
+            ChatId(UUID.randomUUID().toString()),
+            "test"
+        )
+    }
+}
+
+@Serializable
+data class Chats(
+    val items: List<Chat>
+) : Response()
