@@ -1,6 +1,5 @@
 package ru.gubatenko.server.data
 
-import io.ktor.server.websocket.WebSocketServerSession
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.Chats
@@ -12,18 +11,15 @@ import ru.gubatenko.common.Messages
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.UserId
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 class DataStoreHashMaps : DataStore() {
-    private val sessions = ConcurrentHashMap<UserId, WebSocketServerSession>()
 
     private val chats = hashMapOf<ChatId, Chat>()
     private val messages = hashMapOf<ChatId, HashMap<MessageId, Message>>()
 
     override fun createChat(body: CreateChatBody): Chat {
-        val id = ChatId(UUID.randomUUID().toString())
-        val chat = Chat(id, body.name)
-        chats[id] = chat
+        val chat = Chat(ChatId(UUID.randomUUID().toString()),UserId("test"), body.name)
+        chats[chat.id] = chat
         return chat
     }
 
@@ -40,6 +36,7 @@ class DataStoreHashMaps : DataStore() {
             val timestamp = System.currentTimeMillis()
             val message = Message(
                 id = messageId,
+                senderId = UserId("test"),
                 timestamp = timestamp,
                 text = text
             )
@@ -48,6 +45,7 @@ class DataStoreHashMaps : DataStore() {
             } else {
                 messages[chatId] = hashMapOf(messageId to message)
             }
+
             return message
         } else {
             error("chat is missing")

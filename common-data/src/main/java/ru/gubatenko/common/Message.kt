@@ -2,7 +2,6 @@ package ru.gubatenko.common
 
 import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @JvmInline
 @Serializable
@@ -28,17 +27,10 @@ data object CreateMessageRout
 @Serializable
 data class Message(
     val id: MessageId,
+    val senderId: UserId,
     val timestamp: Long,
     val text: String
-) : Response() {
-    companion object {
-        fun test() = Message(
-            MessageId(UUID.randomUUID().toString()),
-            System.currentTimeMillis(),
-            "test"
-        )
-    }
-}
+) : Response()
 
 @Serializable
 data class Messages(

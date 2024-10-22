@@ -49,7 +49,6 @@ class ExampleUnitTest {
     fun ws() {
         runBlocking {
             socketFlow()
-                .take(2)
                 .onEach { println(it) }
                 .collect()
 

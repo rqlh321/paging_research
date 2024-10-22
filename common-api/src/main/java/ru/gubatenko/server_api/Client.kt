@@ -13,15 +13,18 @@ import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.receiveDeserialized
 import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import ru.gubatenko.common.Response
+import ru.gubatenko.common.UserId
 
 private const val BASE_HOST = "http://192.168.0.4"
 private const val PORT = 8080
@@ -53,9 +56,11 @@ internal val httpClient = HttpClient(OkHttp) {
 }
 
 fun socketFlow() = callbackFlow {
-    httpClient.webSocket {
+    httpClient.webSocket(request = { header(UserId.KEY, "test") }) {
         while (isActive) {
-            send(receiveDeserialized<Response>())
+            val response = receiveDeserialized<Response>()
+            send(response)
         }
+        awaitClose()
     }
 }
