@@ -9,9 +9,7 @@ import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateChatRout
 import ru.gubatenko.server.data.DataStore
 
-fun Routing.chats(
-    dataStore: DataStore
-) {
+fun Routing.chats(dataStore: DataStore) {
     get<ChatRout> { call.respond(dataStore.chats()) }
     post<CreateChatRout, CreateChatBody> { _, body -> call.respond(dataStore.createChat(body)) }
 }

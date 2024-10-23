@@ -12,8 +12,9 @@ import ru.gubatenko.server.domain.CreateMessageUseCase
 
 fun Routing.messages(
     dataStore: DataStore,
-    createMessageUseCase: CreateMessageUseCase
+    createMessageUseCase: CreateMessageUseCase,
 ) {
+
     get<MessagesRout> { call.respond(dataStore.messages(it)) }
 
     post<CreateMessageRout, CreateMessageBody> { _, body ->

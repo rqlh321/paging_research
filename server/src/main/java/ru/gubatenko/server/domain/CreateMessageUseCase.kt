@@ -8,9 +8,9 @@ import ru.gubatenko.server.session.UserWebSocketSessionController
 class CreateMessageUseCase(
     private val dataStore: DataStore,
     private val sessionController: UserWebSocketSessionController,
-) {
-    suspend fun run(body: CreateMessageBody): Response {
-        val message = dataStore.createMessage(body)
+) : UseCase<CreateMessageBody>() {
+    override suspend fun run(args: CreateMessageBody): Response {
+        val message = dataStore.createMessage(args)
         sessionController.send(message.senderId, message)
         return message
     }

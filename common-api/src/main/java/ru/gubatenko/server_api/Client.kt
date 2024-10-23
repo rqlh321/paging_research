@@ -46,7 +46,11 @@ internal val httpClient = HttpClient(OkHttp) {
         connectTimeoutMillis = CONNECT_TIMEOUT
     }
     install(Resources)
-    install(ContentNegotiation) { json() }
+    install(ContentNegotiation) {
+        json(Json {
+            ignoreUnknownKeys = true
+        })
+    }
     install(Logging) {
         logger = Logger.ANDROID
         level = LogLevel.ALL

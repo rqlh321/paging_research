@@ -5,10 +5,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import ru.gubatenko.common.AuthBody
 import ru.gubatenko.common.AuthRout
-import ru.gubatenko.server.data.DataStore
 
-fun Routing.auth(
-    dataStore: DataStore
-) {
+fun Routing.auth() {
     post<AuthRout, AuthBody> { _, body -> call.respond(body) }
 }
