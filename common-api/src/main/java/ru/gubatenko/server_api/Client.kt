@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import ru.gubatenko.common.Response
-import ru.gubatenko.common.UserId
 
 private const val BASE_HOST = "http://192.168.0.4"
 private const val PORT = 8080
@@ -47,9 +46,11 @@ internal val httpClient = HttpClient(OkHttp) {
     }
     install(Resources)
     install(ContentNegotiation) {
-        json(Json {
-            ignoreUnknownKeys = true
-        })
+        json(
+            Json {
+                ignoreUnknownKeys = true
+            }
+        )
     }
     install(Logging) {
         logger = Logger.ANDROID
@@ -59,12 +60,16 @@ internal val httpClient = HttpClient(OkHttp) {
     }
 }
 
-fun socketFlow() = callbackFlow {
-    httpClient.webSocket(request = { header(UserId.KEY, "test") }) {
+fun socketFlow(token: String) = callbackFlow {
+    httpClient.webSocket(
+        request = { header(AUTH_HEADER_KEY, AUTH_HEADER_VAL.format(token)) }
+    ) {
         while (isActive) {
-            val response = receiveDeserialized<Response>()
-            send(response)
+            send(receiveDeserialized<Response>())
         }
         awaitClose()
     }
 }
+
+const val AUTH_HEADER_KEY = "Authorization"
+const val AUTH_HEADER_VAL = "Bearer %s"

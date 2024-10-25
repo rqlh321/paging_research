@@ -6,14 +6,36 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import ru.gubatenko.server.data.DataStore
 import ru.gubatenko.server.data.DataStoreHashMaps
+import ru.gubatenko.server.data.UserWebSocketSessionController
 import ru.gubatenko.server.domain.CreateMessageUseCase
-import ru.gubatenko.server.plugins.configureRouting
-import ru.gubatenko.server.session.UserWebSocketSessionController
+import ru.gubatenko.server.domain.LoginUseCase
+import ru.gubatenko.server.presentation.AuthRouting
+import ru.gubatenko.server.presentation.ChatsRouting
+import ru.gubatenko.server.presentation.MessagesRouting
+import ru.gubatenko.server.presentation.WebSocketRouting
 
-val appModule = module {
+val dataModule = module {
     singleOf(::DataStoreHashMaps) { bind<DataStore>() }
     singleOf(::UserWebSocketSessionController)
+}
+val useCaseModule = module {
     singleOf(::CreateMessageUseCase)
+    singleOf(::LoginUseCase)
+}
+val routingModule = module {
+    singleOf(::AuthRouting)
+    singleOf(::ChatsRouting)
+    singleOf(::MessagesRouting)
+    singleOf(::WebSocketRouting)
+
+    single<List<RoutingSetup>> {
+        listOf(
+            get<AuthRouting>(),
+            get<ChatsRouting>(),
+            get<MessagesRouting>(),
+            get<WebSocketRouting>(),
+        )
+    }
 }
 
 fun main(args: Array<String>) {

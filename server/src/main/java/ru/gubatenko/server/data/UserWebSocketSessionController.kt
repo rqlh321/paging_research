@@ -1,4 +1,4 @@
-package ru.gubatenko.server.session
+package ru.gubatenko.server.data
 
 import io.ktor.server.websocket.WebSocketServerSession
 import io.ktor.server.websocket.sendSerialized

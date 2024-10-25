@@ -7,4 +7,13 @@ import kotlinx.serialization.Serializable
 data object AuthRout
 
 @Serializable
-data class AuthBody(val username: String)
+data class AuthBody(
+    val username: String,
+    val password: String
+)
+
+@Serializable
+data class Credentials(
+    val accessToken: String,
+    val refreshToken: String
+) : Response()

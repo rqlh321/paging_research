@@ -3,7 +3,7 @@ package ru.gubatenko.server.domain
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Response
 import ru.gubatenko.server.data.DataStore
-import ru.gubatenko.server.session.UserWebSocketSessionController
+import ru.gubatenko.server.data.UserWebSocketSessionController
 
 class CreateMessageUseCase(
     private val dataStore: DataStore,
