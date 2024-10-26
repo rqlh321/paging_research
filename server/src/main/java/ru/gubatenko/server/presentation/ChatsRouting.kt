@@ -9,17 +9,23 @@ import ru.gubatenko.common.ChatRout
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateChatRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.data.DataStore
+import ru.gubatenko.server.domain.ChatRepository
 
 class ChatsRouting(
-    private val dataStore: DataStore
+    private val repo: ChatRepository
 ) : RoutingSetup() {
 
     override fun setupRouting(routing: Routing) {
         routing.authenticate {
-            get<ChatRout> { call.respond(dataStore.chats()) }
+            get<ChatRout> {
+                val userId = call.userId()
+                val result = repo.chats(userId)
+                call.respond(result)
+            }
             post<CreateChatRout, CreateChatBody> { _, body ->
-                call.respond(dataStore.createChat(body))
+                val userId = call.userId()
+                val result = repo.createChat(userId, body)
+                call.respond(result)
             }
         }
     }

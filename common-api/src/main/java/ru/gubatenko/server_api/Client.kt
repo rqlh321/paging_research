@@ -30,12 +30,14 @@ private const val PORT = 8080
 private const val CONNECT_TIMEOUT = 5000L
 private const val REQUEST_TIMEOUT = 10000L
 private const val WS_PING_INTERVAL = 15000L
+var token = ""
 internal val httpClient = HttpClient(OkHttp) {
     install(WebSockets) {
         contentConverter = KotlinxWebsocketSerializationConverter(Json)
         pingInterval = WS_PING_INTERVAL
     }
     defaultRequest {
+        header(AUTH_HEADER_KEY, AUTH_HEADER_VAL.format(token))
         contentType(ContentType.Application.Json)
         url(BASE_HOST)
         port = PORT

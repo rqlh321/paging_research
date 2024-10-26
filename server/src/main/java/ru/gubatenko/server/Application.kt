@@ -1,21 +1,26 @@
 package ru.gubatenko.server
 
 import io.ktor.server.application.Application
+import org.jetbrains.exposed.sql.Database
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import ru.gubatenko.server.data.DataStore
-import ru.gubatenko.server.data.DataStoreHashMaps
+import ru.gubatenko.server.data.ChatRepositoryImpl
+import ru.gubatenko.server.data.MessageRepositoryImpl
 import ru.gubatenko.server.data.UserWebSocketSessionController
+import ru.gubatenko.server.domain.ChatRepository
 import ru.gubatenko.server.domain.CreateMessageUseCase
 import ru.gubatenko.server.domain.LoginUseCase
+import ru.gubatenko.server.domain.MessageRepository
 import ru.gubatenko.server.presentation.AuthRouting
 import ru.gubatenko.server.presentation.ChatsRouting
 import ru.gubatenko.server.presentation.MessagesRouting
 import ru.gubatenko.server.presentation.WebSocketRouting
 
 val dataModule = module {
-    singleOf(::DataStoreHashMaps) { bind<DataStore>() }
+    singleOf(::ChatRepositoryImpl) { bind<ChatRepository>() }
+    singleOf(::MessageRepositoryImpl) { bind<MessageRepository>() }
+
     singleOf(::UserWebSocketSessionController)
 }
 val useCaseModule = module {
@@ -43,5 +48,11 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    Database.connect(
+        url = "jdbc:postgresql://localhost:5438/postgres",
+        driver = "org.postgresql.Driver",
+        user = "postgres",
+        password = "postgres"
+    )
     configureRouting()
 }

@@ -2,8 +2,12 @@ ktor:
     application:
         modules:
             - ru.gubatenko.server.ApplicationKt.module
+    development: true
     deployment:
         port: 8080
+        watch:
+          - classes
+          - resources
 jwt:
     domain: "https://jwt-provider-domain/"
     audience: "jwt-audience"

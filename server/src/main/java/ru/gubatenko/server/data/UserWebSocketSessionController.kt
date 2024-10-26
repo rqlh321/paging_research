@@ -10,14 +10,9 @@ import java.util.concurrent.ConcurrentHashMap
 class UserWebSocketSessionController {
     private val sessions = ConcurrentHashMap<UserId, WebSocketServerSession>()
 
-    suspend fun checkInSession(id: String?, newSession: WebSocketServerSession) {
-        if (id == null) {
-            newSession.close()
-        } else {
-            val userId = UserId(id)
-            sessions[userId]?.close()
-            sessions[userId] = newSession
-        }
+    suspend fun checkInSession(userId: UserId, newSession: WebSocketServerSession) {
+        sessions[userId]?.close()
+        sessions[userId] = newSession
     }
 
     suspend fun send(senderId: UserId, response: Response) {

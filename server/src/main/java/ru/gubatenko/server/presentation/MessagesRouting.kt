@@ -9,19 +9,27 @@ import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.CreateMessageRout
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.data.DataStore
 import ru.gubatenko.server.domain.CreateMessageUseCase
+import ru.gubatenko.server.domain.CreateMessageUseCaseArgs
+import ru.gubatenko.server.domain.MessageRepository
 
 class MessagesRouting(
-    private val dataStore: DataStore,
+    private val repo: MessageRepository,
     private val createMessageUseCase: CreateMessageUseCase,
 ) : RoutingSetup() {
 
     override fun setupRouting(routing: Routing) {
         routing.authenticate {
-            get<MessagesRout> { call.respond(dataStore.messages(it)) }
+            get<MessagesRout> {
+                val userId = call.userId()
+                val result = repo.messages(userId, it)
+                call.respond(result)
+            }
             post<CreateMessageRout, CreateMessageBody> { _, body ->
-                call.respond(createMessageUseCase.run(body))
+                val userId = call.userId()
+                val args = CreateMessageUseCaseArgs(userId, body)
+                val result = createMessageUseCase.run(args)
+                call.respond(result)
             }
         }
     }

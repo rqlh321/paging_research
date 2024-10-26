@@ -12,6 +12,7 @@ import ru.gubatenko.server_api.AuthApi
 import ru.gubatenko.server_api.ChatApi
 import ru.gubatenko.server_api.MessageApi
 import ru.gubatenko.server_api.socketFlow
+import ru.gubatenko.server_api.token
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -27,6 +28,7 @@ class ExampleUnitTest {
             val messageApi = MessageApi()
 
             val result = authApi.auth(AuthBody("test", "test"))
+            token = result.accessToken
             val chatId = chatApi.create(CreateChatBody("new")).id
             println(chatId)
             val message = messageApi.create(CreateMessageBody(chatId, "hola"))
