@@ -18,6 +18,14 @@ import ru.gubatenko.server.presentation.MessagesRouting
 import ru.gubatenko.server.presentation.WebSocketRouting
 
 val dataModule = module {
+    single {
+        Database.connect(
+            url = "jdbc:postgresql://localhost:5432/postgres",
+            driver = "org.postgresql.Driver",
+            user = "postgres",
+            password = "32167"
+        )
+    }
     singleOf(::ChatRepositoryImpl) { bind<ChatRepository>() }
     singleOf(::MessageRepositoryImpl) { bind<MessageRepository>() }
 
@@ -48,11 +56,5 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    Database.connect(
-        url = "jdbc:postgresql://localhost:5438/postgres",
-        driver = "org.postgresql.Driver",
-        user = "postgres",
-        password = "postgres"
-    )
     configureRouting()
 }

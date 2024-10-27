@@ -15,7 +15,7 @@ class UserWebSocketSessionController {
         sessions[userId] = newSession
     }
 
-    suspend fun send(senderId: UserId, response: Response) {
-        sessions[senderId]?.sendSerialized(response)
+    suspend fun send(userId: UserId, response: Response) {
+        sessions[userId]?.sendSerialized(response)
     }
 }

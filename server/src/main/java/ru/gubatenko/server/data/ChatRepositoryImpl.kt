@@ -1,5 +1,8 @@
 package ru.gubatenko.server.data
 
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.Chats
@@ -7,7 +10,16 @@ import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.UserId
 import ru.gubatenko.server.domain.ChatRepository
 
-class ChatRepositoryImpl : ChatRepository {
+class ChatRepositoryImpl(
+    database: Database
+) : ChatRepository {
+
+    init {
+        transaction(database) {
+            SchemaUtils.create(ChatTable)
+        }
+    }
+
     override suspend fun createChat(
         userId: UserId,
         body: CreateChatBody

@@ -1,5 +1,8 @@
 package ru.gubatenko.server.data
 
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
@@ -8,7 +11,16 @@ import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.UserId
 import ru.gubatenko.server.domain.MessageRepository
 
-class MessageRepositoryImpl : MessageRepository {
+class MessageRepositoryImpl(
+    database: Database
+) : MessageRepository {
+
+    init {
+        transaction(database) {
+            SchemaUtils.create(MessageTable)
+        }
+    }
+
     override suspend fun createMessage(
         userId: UserId,
         body: CreateMessageBody
