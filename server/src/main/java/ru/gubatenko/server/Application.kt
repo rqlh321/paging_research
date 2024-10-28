@@ -23,7 +23,7 @@ val dataModule = module {
             url = "jdbc:postgresql://localhost:5432/postgres",
             driver = "org.postgresql.Driver",
             user = "postgres",
-            password = "32167"
+            password = "mysecretpassword"
         )
     }
     singleOf(::ChatRepositoryImpl) { bind<ChatRepository>() }
