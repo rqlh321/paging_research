@@ -1,4 +1,4 @@
-package ru.gubatenko.server.data
+package ru.gubatenko.server.data.chat
 
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass

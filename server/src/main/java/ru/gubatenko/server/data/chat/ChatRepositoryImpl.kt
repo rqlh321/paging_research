@@ -1,4 +1,4 @@
-package ru.gubatenko.server.data
+package ru.gubatenko.server.data.chat
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -8,6 +8,7 @@ import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.Chats
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.UserId
+import ru.gubatenko.server.data.suspendTransaction
 import ru.gubatenko.server.domain.ChatRepository
 
 class ChatRepositoryImpl(

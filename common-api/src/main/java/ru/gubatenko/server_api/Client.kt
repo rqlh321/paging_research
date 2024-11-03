@@ -19,9 +19,8 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import ru.gubatenko.common.Response
 
@@ -62,14 +61,10 @@ internal val httpClient = HttpClient(OkHttp) {
     }
 }
 
-fun socketFlow(token: String) = callbackFlow {
-    httpClient.webSocket(
-        request = { header(AUTH_HEADER_KEY, AUTH_HEADER_VAL.format(token)) }
-    ) {
-        while (isActive) {
-            send(receiveDeserialized<Response>())
-        }
-        awaitClose()
+fun socketFlow() = callbackFlow {
+    httpClient.webSocket {
+        send(receiveDeserialized<Response>())
+        awaitCancellation()
     }
 }
 

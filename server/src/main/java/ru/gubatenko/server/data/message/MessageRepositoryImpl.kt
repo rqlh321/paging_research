@@ -1,4 +1,4 @@
-package ru.gubatenko.server.data
+package ru.gubatenko.server.data.message
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -9,6 +9,7 @@ import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.Messages
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.UserId
+import ru.gubatenko.server.data.suspendTransaction
 import ru.gubatenko.server.domain.MessageRepository
 
 class MessageRepositoryImpl(
@@ -27,6 +28,7 @@ class MessageRepositoryImpl(
     ) = suspendTransaction {
         daoToModel(
             MessageDAO.new {
+                chatId = body.chatId.uuid()
                 senderId = userId.uuid()
                 text = body.text
                 timestamp = System.currentTimeMillis()

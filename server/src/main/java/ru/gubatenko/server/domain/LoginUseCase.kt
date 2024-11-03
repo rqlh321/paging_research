@@ -31,7 +31,7 @@ class LoginUseCase : UseCase<AuthBody>() {
         .sign(Algorithm.HMAC256(jwtSecret))
 
     companion object {
-        const val TEST_USER_ID = "8D8AC610-566D-4EF0-9C22-186B2A5ED793"
+        const val TEST_USER_ID = "8d8ac610-566d-4ef0-9c22-186b2a5ed793"
 
         const val jwtAudience = "jwt-audience"
         const val jwtIssuer = "https://jwt-provider-domain/"

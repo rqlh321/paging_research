@@ -5,8 +5,8 @@ import org.jetbrains.exposed.sql.Database
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import ru.gubatenko.server.data.ChatRepositoryImpl
-import ru.gubatenko.server.data.MessageRepositoryImpl
+import ru.gubatenko.server.data.chat.ChatRepositoryImpl
+import ru.gubatenko.server.data.message.MessageRepositoryImpl
 import ru.gubatenko.server.data.UserWebSocketSessionController
 import ru.gubatenko.server.domain.ChatRepository
 import ru.gubatenko.server.domain.CreateMessageUseCase

@@ -1,15 +1,18 @@
 package ru.gubatenko.common.repo
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
+import org.junit.Ignore
 import org.junit.Test
 import ru.gubatenko.common.AuthBody
-import ru.gubatenko.common.CreateChatBody
+import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.CreateMessageBody
-import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.server_api.AuthApi
-import ru.gubatenko.server_api.ChatApi
 import ru.gubatenko.server_api.MessageApi
 import ru.gubatenko.server_api.socketFlow
 import ru.gubatenko.server_api.token
@@ -20,41 +23,57 @@ import ru.gubatenko.server_api.token
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        runBlocking {
-            val authApi = AuthApi()
-            val chatApi = ChatApi()
-            val messageApi = MessageApi()
+    val authApi = AuthApi()
+    val messageApi = MessageApi()
+    val body = CreateMessageBody(
+        chatId = ChatId("fe35b7c4-1f47-46da-b07d-3312962893d9"),
+        text = "hola"
+    )
 
+    @Test
+    fun test1() {
+        runBlocking {
             val result = authApi.auth(AuthBody("test", "test"))
             token = result.accessToken
-            val chatId = chatApi.create(CreateChatBody("new")).id
-            println(chatId)
-            val message = messageApi.create(CreateMessageBody(chatId, "hola"))
-            println(message)
-            val messages = messageApi.messages(
-                MessagesRout(
-                    chatId = chatId,
-                    messageId = null,
-                    isDirectionToLatest = false,
-                    limit = 100
-                )
-            )
-
-            println(messages)
         }
     }
 
     @Test
+    fun test2() {
+        runBlocking {
+            val flow = socketFlow()
+                .onEach {
+                    println(it)
+                    cancel()
+                }
+                .launchIn(CoroutineScope(currentCoroutineContext()))
+            messageApi.create(body)
+            flow.join()
+        }
+    }
+
+    @Test
+    fun test3() {
+        runBlocking {
+            val flow = socketFlow()
+                .onEach {
+                    println(it)
+                    cancel()
+                }
+                .launchIn(CoroutineScope(currentCoroutineContext()))
+            messageApi.create(body)
+            flow.join()
+        }
+    }
+
+    @Test
+    @Ignore
     fun ws() {
         val authApi = AuthApi()
         runBlocking {
-            val result = authApi.auth(AuthBody("test", "test"))
-            socketFlow(result.accessToken)
+            socketFlow()
                 .onEach { println(it) }
                 .collect()
-
         }
     }
 }
