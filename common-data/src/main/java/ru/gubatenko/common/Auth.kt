@@ -8,12 +8,12 @@ data object AuthRout
 
 @Serializable
 data class AuthBody(
-    val username: String,
-    val password: String
+    val username: Username,
+    val password: Password
 )
 
 @Serializable
 data class Credentials(
-    val accessToken: String,
-    val refreshToken: String
+    val accessToken: AccessToken,
+    val refreshToken: RefreshToken
 ) : Response()

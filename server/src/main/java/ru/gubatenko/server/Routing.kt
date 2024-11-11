@@ -19,22 +19,25 @@ import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
-import ru.gubatenko.server.domain.LoginUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 fun Application.configureRouting() {
     authentication {
         jwt {
-            realm = LoginUseCase.jwtRealm
+            realm = Const.jwtRealm
             verifier(
                 JWT
-                    .require(Algorithm.HMAC256(LoginUseCase.jwtSecret))
-                    .withAudience(LoginUseCase.jwtAudience)
-                    .withIssuer(LoginUseCase.jwtIssuer)
+                    .require(Algorithm.HMAC256(Const.jwtSecret))
+                    .withAudience(Const.jwtAudience)
+                    .withIssuer(Const.jwtIssuer)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(LoginUseCase.jwtAudience)) JWTPrincipal(credential.payload) else null
+                if (credential.payload.audience.contains(Const.jwtAudience)) {
+                    JWTPrincipal(credential.payload)
+                } else {
+                    null
+                }
             }
         }
     }

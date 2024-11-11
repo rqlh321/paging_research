@@ -9,9 +9,9 @@ import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.CreateMessageRout
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.domain.CreateMessageUseCase
-import ru.gubatenko.server.domain.CreateMessageUseCaseArgs
-import ru.gubatenko.server.domain.MessageRepository
+import ru.gubatenko.server.domain.usecase.CreateMessageUseCase
+import ru.gubatenko.server.domain.usecase.CreateMessageUseCaseArgs
+import ru.gubatenko.server.domain.repo.MessageRepository
 
 class MessagesRouting(
     private val repo: MessageRepository,

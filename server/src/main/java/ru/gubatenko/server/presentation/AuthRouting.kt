@@ -6,7 +6,7 @@ import io.ktor.server.routing.Routing
 import ru.gubatenko.common.AuthBody
 import ru.gubatenko.common.AuthRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.domain.LoginUseCase
+import ru.gubatenko.server.domain.usecase.LoginUseCase
 
 class AuthRouting(
     private val loginUseCase: LoginUseCase

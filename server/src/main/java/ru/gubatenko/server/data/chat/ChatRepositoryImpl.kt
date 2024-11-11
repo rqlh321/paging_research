@@ -1,32 +1,24 @@
 package ru.gubatenko.server.data.chat
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.Chats
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.UserId
+import ru.gubatenko.server.data.DaoStore
 import ru.gubatenko.server.data.suspendTransaction
-import ru.gubatenko.server.domain.ChatRepository
+import ru.gubatenko.server.domain.repo.ChatRepository
 
 class ChatRepositoryImpl(
-    database: Database
+    private val daoStore: DaoStore
 ) : ChatRepository {
-
-    init {
-        transaction(database) {
-            SchemaUtils.create(ChatTable)
-        }
-    }
 
     override suspend fun createChat(
         userId: UserId,
         body: CreateChatBody
     ) = suspendTransaction {
         daoToModel(
-            ChatDAO.new {
+            daoStore.chatDao().new {
                 ownerId = userId.uuid()
                 name = body.name
             }
@@ -37,7 +29,7 @@ class ChatRepositoryImpl(
         userId: UserId
     ) = suspendTransaction {
         Chats(
-            ChatDAO.find { (ChatTable.ownerId eq userId.uuid()) }.map(::daoToModel)
+            daoStore.chatDao().find { (ChatTable.ownerId eq userId.uuid()) }.map(::daoToModel)
         )
     }
 

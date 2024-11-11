@@ -9,7 +9,7 @@ import ru.gubatenko.common.ChatRout
 import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.CreateChatRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.domain.ChatRepository
+import ru.gubatenko.server.domain.repo.ChatRepository
 
 class ChatsRouting(
     private val repo: ChatRepository

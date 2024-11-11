@@ -1,33 +1,25 @@
 package ru.gubatenko.server.data.message
 
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.Messages
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.UserId
+import ru.gubatenko.server.data.DaoStore
 import ru.gubatenko.server.data.suspendTransaction
-import ru.gubatenko.server.domain.MessageRepository
+import ru.gubatenko.server.domain.repo.MessageRepository
 
 class MessageRepositoryImpl(
-    database: Database
+    private val daoStore: DaoStore
 ) : MessageRepository {
-
-    init {
-        transaction(database) {
-            SchemaUtils.create(MessageTable)
-        }
-    }
 
     override suspend fun createMessage(
         userId: UserId,
         body: CreateMessageBody
     ) = suspendTransaction {
         daoToModel(
-            MessageDAO.new {
+            daoStore.messageDao().new {
                 chatId = body.chatId.uuid()
                 senderId = userId.uuid()
                 text = body.text
@@ -41,7 +33,7 @@ class MessageRepositoryImpl(
         rout: MessagesRout
     ) = suspendTransaction {
         Messages(
-            MessageDAO
+            daoStore.messageDao()
                 .find { (MessageTable.chatId eq rout.chatId.uuid()) }
                 .limit(rout.limit.toInt())
                 .map(::daoToModel)

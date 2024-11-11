@@ -12,6 +12,8 @@ import org.junit.Test
 import ru.gubatenko.common.AuthBody
 import ru.gubatenko.common.ChatId
 import ru.gubatenko.common.CreateMessageBody
+import ru.gubatenko.common.Password
+import ru.gubatenko.common.Username
 import ru.gubatenko.server_api.AuthApi
 import ru.gubatenko.server_api.MessageApi
 import ru.gubatenko.server_api.socketFlow
@@ -33,8 +35,8 @@ class ExampleUnitTest {
     @Test
     fun test1() {
         runBlocking {
-            val result = authApi.auth(AuthBody("test", "test"))
-            token = result.accessToken
+            val result = authApi.auth(AuthBody(Username("test"), Password("test")))
+            token = result.accessToken.value
         }
     }
 

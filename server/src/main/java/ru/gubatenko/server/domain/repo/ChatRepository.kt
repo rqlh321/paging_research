@@ -1,4 +1,4 @@
-package ru.gubatenko.server.domain
+package ru.gubatenko.server.domain.repo
 
 import ru.gubatenko.common.Chat
 import ru.gubatenko.common.Chats

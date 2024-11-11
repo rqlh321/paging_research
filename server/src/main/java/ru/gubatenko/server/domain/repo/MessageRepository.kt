@@ -1,4 +1,4 @@
-package ru.gubatenko.server.domain
+package ru.gubatenko.server.domain.repo
 
 import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.Message

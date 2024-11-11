@@ -8,3 +8,11 @@ import java.util.UUID
 value class UserId(val value: String) {
     fun uuid(): UUID = UUID.fromString(value)
 }
+
+@JvmInline
+@Serializable
+value class Username(val value: String)
+
+@JvmInline
+@Serializable
+value class Password(val value: String)
