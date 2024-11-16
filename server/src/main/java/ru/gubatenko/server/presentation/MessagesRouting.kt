@@ -5,9 +5,9 @@ import io.ktor.server.resources.get
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
-import ru.gubatenko.common.CreateMessageBody
-import ru.gubatenko.common.CreateMessageRout
-import ru.gubatenko.common.MessagesRout
+import ru.gubatenko.message.data.CreateMessageBody
+import ru.gubatenko.message.data.CreateMessageRout
+import ru.gubatenko.message.data.MessagesRout
 import ru.gubatenko.server.RoutingSetup
 import ru.gubatenko.server.domain.repo.MessageRepository
 import ru.gubatenko.server.domain.usecase.CreateMessageUseCase

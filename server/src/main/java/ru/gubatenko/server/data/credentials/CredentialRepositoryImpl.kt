@@ -3,8 +3,8 @@ package ru.gubatenko.server.data.credentials
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.jetbrains.exposed.sql.and
+import ru.gubatenko.auth.data.Credentials
 import ru.gubatenko.common.AccessToken
-import ru.gubatenko.common.Credentials
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.RefreshToken
 import ru.gubatenko.common.UserId

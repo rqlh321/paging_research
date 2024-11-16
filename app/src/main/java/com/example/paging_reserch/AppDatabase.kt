@@ -2,10 +2,10 @@ package com.example.paging_reserch
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.gubatenko.common.database.ChatDao
-import ru.gubatenko.common.database.ChatDatabaseEntity
-import ru.gubatenko.common.database.MessageDao
-import ru.gubatenko.common.database.MessageDatabaseEntity
+import ru.gubatenko.chat.domain.impl.ChatDao
+import ru.gubatenko.chat.domain.impl.ChatDatabaseEntity
+import ru.gubatenko.message.domain.impl.MessageDao
+import ru.gubatenko.message.domain.impl.MessageDatabaseEntity
 
 @Database(
     entities = [

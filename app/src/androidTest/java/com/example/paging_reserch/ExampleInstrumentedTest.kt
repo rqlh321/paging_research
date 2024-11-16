@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.gubatenko.common.database.MessageDatabaseEntity
+import ru.gubatenko.message.domain.impl.MessageDatabaseEntity
 
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {

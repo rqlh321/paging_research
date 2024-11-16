@@ -23,50 +23,55 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.serialization.json.Json
 import ru.gubatenko.common.Response
+import ru.gubatenko.credential.store.TokenStore
 
-private const val BASE_HOST = "http://192.168.0.4"
-private const val PORT = 8080
-private const val CONNECT_TIMEOUT = 5000L
-private const val REQUEST_TIMEOUT = 10000L
-private const val WS_PING_INTERVAL = 15000L
-var token = ""
-internal val httpClient = HttpClient(OkHttp) {
-    install(WebSockets) {
-        contentConverter = KotlinxWebsocketSerializationConverter(Json)
-        pingInterval = WS_PING_INTERVAL
+class Client(
+    private val config: ClientConfig = ClientConfig(),
+    private val tokenStore: TokenStore
+) {
+    val httpClient = HttpClient(OkHttp) {
+        install(WebSockets) {
+            contentConverter = KotlinxWebsocketSerializationConverter(Json)
+            pingInterval = config.wsPingTimeOut
+        }
+
+        defaultRequest {
+            header(
+                AUTH_HEADER_KEY,
+                AUTH_HEADER_VAL.format(tokenStore.getAccessToken()?.value.orEmpty())
+            )
+            contentType(ContentType.Application.Json)
+            url(config.host)
+            port = config.port
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = config.requestTimeout
+            connectTimeoutMillis = config.connectTimeout
+        }
+        install(Resources)
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                }
+            )
+        }
+        install(Logging) {
+            logger = Logger.ANDROID
+            level = LogLevel.ALL
+            filter { request -> request.url.host.contains(config.host) }
+            sanitizeHeader { header -> header == HttpHeaders.Authorization }
+        }
     }
-    defaultRequest {
-        header(AUTH_HEADER_KEY, AUTH_HEADER_VAL.format(token))
-        contentType(ContentType.Application.Json)
-        url(BASE_HOST)
-        port = PORT
-    }
-    install(HttpTimeout) {
-        requestTimeoutMillis = REQUEST_TIMEOUT
-        connectTimeoutMillis = CONNECT_TIMEOUT
-    }
-    install(Resources)
-    install(ContentNegotiation) {
-        json(
-            Json {
-                ignoreUnknownKeys = true
-            }
-        )
-    }
-    install(Logging) {
-        logger = Logger.ANDROID
-        level = LogLevel.ALL
-        filter { request -> request.url.host.contains(BASE_HOST) }
-        sanitizeHeader { header -> header == HttpHeaders.Authorization }
+
+    val socketFlow = callbackFlow {
+        httpClient.webSocket {
+            send(receiveDeserialized<Response>())
+            awaitCancellation()
+        }
     }
 }
 
-fun socketFlow() = callbackFlow {
-    httpClient.webSocket {
-        send(receiveDeserialized<Response>())
-        awaitCancellation()
-    }
-}
 
 const val AUTH_HEADER_KEY = "Authorization"
 const val AUTH_HEADER_VAL = "Bearer %s"

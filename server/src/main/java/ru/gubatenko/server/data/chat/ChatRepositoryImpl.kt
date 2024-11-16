@@ -1,9 +1,9 @@
 package ru.gubatenko.server.data.chat
 
-import ru.gubatenko.common.Chat
+import ru.gubatenko.chat.data.Chat
+import ru.gubatenko.chat.data.Chats
+import ru.gubatenko.chat.data.CreateChatBody
 import ru.gubatenko.common.ChatId
-import ru.gubatenko.common.Chats
-import ru.gubatenko.common.CreateChatBody
 import ru.gubatenko.common.UserId
 import ru.gubatenko.server.data.DaoStore
 import ru.gubatenko.server.data.suspendTransaction

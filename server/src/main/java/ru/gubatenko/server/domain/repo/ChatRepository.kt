@@ -1,8 +1,8 @@
 package ru.gubatenko.server.domain.repo
 
-import ru.gubatenko.common.Chat
-import ru.gubatenko.common.Chats
-import ru.gubatenko.common.CreateChatBody
+import ru.gubatenko.chat.data.Chat
+import ru.gubatenko.chat.data.Chats
+import ru.gubatenko.chat.data.CreateChatBody
 import ru.gubatenko.common.UserId
 
 interface ChatRepository {

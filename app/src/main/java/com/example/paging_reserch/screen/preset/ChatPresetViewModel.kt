@@ -8,11 +8,13 @@ import com.example.paging_reserch.App
 import com.example.paging_reserch.screen.chat.ChatDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import ru.gubatenko.chat.domain.impl.ChatDatabaseEntity
 
 class ChatPresetViewModel(
     app: Application,
@@ -26,18 +28,14 @@ class ChatPresetViewModel(
     val actions = channel.receiveAsFlow()
 
     init {
-        App.chatRepo.chats()
+        emptyFlow<List<ChatDatabaseEntity>>()
             .onEach {
                 val chat = it.firstOrNull()
                 val buttons = if (chat == null) {
                     listOf(
                         ButtonItem(
                             text = "Создать чат",
-                            onClick = {
-                                viewModelScope.launch {
-                                    App.chatRepo.create("test")
-                                }
-                            }
+                            onClick = {}
                         )
                     )
                 } else {

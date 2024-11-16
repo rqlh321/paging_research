@@ -5,9 +5,9 @@ import io.ktor.server.resources.get
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
-import ru.gubatenko.common.ChatRout
-import ru.gubatenko.common.CreateChatBody
-import ru.gubatenko.common.CreateChatRout
+import ru.gubatenko.chat.data.ChatRout
+import ru.gubatenko.chat.data.CreateChatBody
+import ru.gubatenko.chat.data.CreateChatRout
 import ru.gubatenko.server.RoutingSetup
 import ru.gubatenko.server.domain.repo.ChatRepository
 

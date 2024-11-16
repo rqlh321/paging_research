@@ -12,6 +12,11 @@ applicationDefaultJvmArgs = ["-Dio.ktor.development=$isDevelopment"]
 
 dependencies {
     implementation project(':common-data')
+    implementation project(':auth-data')
+    implementation project(':chat-data')
+    implementation project(':message-data')
+    implementation project(':user-data')
+
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.ktor)

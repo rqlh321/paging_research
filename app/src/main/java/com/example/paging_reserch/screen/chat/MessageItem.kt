@@ -2,7 +2,7 @@ package com.example.paging_reserch.screen.chat
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
-import ru.gubatenko.common.database.MessageDatabaseEntity
+import ru.gubatenko.message.domain.impl.MessageDatabaseEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.UUID

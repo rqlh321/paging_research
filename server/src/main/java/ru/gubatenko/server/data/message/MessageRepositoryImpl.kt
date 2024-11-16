@@ -1,11 +1,11 @@
 package ru.gubatenko.server.data.message
 
-import ru.gubatenko.common.CreateMessageBody
-import ru.gubatenko.common.Message
 import ru.gubatenko.common.MessageId
-import ru.gubatenko.common.Messages
-import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.UserId
+import ru.gubatenko.message.data.CreateMessageBody
+import ru.gubatenko.message.data.Message
+import ru.gubatenko.message.data.Messages
+import ru.gubatenko.message.data.MessagesRout
 import ru.gubatenko.server.data.DaoStore
 import ru.gubatenko.server.data.suspendTransaction
 import ru.gubatenko.server.domain.repo.MessageRepository
