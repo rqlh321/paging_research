@@ -7,96 +7,75 @@ import ru.gubatenko.common.MessageId
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.common.database.MessageDao
 import ru.gubatenko.common.database.MessageDatabaseEntity
-import ru.gubatenko.common.database.RemoteKeyDao
-import ru.gubatenko.common.database.RemoteKeyDatabaseEntity
 import ru.gubatenko.server_api.MessageApi
 
 class MessageRepo(
-    private val remoteKeyDao: RemoteKeyDao,
     private val messageDao: MessageDao,
 ) {
     private val api: MessageApi = MessageApi()
 
     suspend fun refresh(chatId: String): Boolean = withContext(Dispatchers.IO) {
-        val remoteKey = remoteKeyDao.remoteKey(chatId)
-        if (remoteKey == null) {
-            val response = api.messages(
-                MessagesRout(
-                    chatId = ChatId(chatId),
-                    isDirectionToLatest = true,
-                    limit = INIT_SIZE.toLong()
-                )
+        val response = api.messages(
+            MessagesRout(
+                chatId = ChatId(chatId),
+                isDirectionToLatest = true,
+                limit = INIT_SIZE.toLong()
             )
+        )
 
-            val messageEntities = response.items.map {
-                MessageDatabaseEntity(
-                    chatId = chatId,
-                    messageId = it.id.value,
-                    timestamp = it.timestamp,
-                )
-            }
-            val appendKey = messageEntities.lastOrNull()?.messageId
-            val remoteKeyEntity = RemoteKeyDatabaseEntity(
+        val messageEntities = response.items.map {
+            MessageDatabaseEntity(
                 chatId = chatId,
-                prependKey = null,
-                appendKey = if (response.items.size < INIT_SIZE) null else appendKey
+                messageId = it.id.value,
+                timestamp = it.timestamp,
             )
-            remoteKeyDao.update(remoteKeyEntity)
-            messageDao.update(messageEntities)
         }
+        val appendKey = messageEntities.lastOrNull()?.messageId
+
+        messageDao.update(messageEntities)
         true
     }
 
     suspend fun prepend(chatId: String): Boolean = withContext(Dispatchers.IO) {
-        val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.prependKey?.let {
-            val response = api.messages(
-                MessagesRout(
-                    chatId = ChatId(chatId),
-                    messageId = MessageId(it),
-                    isDirectionToLatest = false,
-                    limit = INIT_SIZE.toLong()
-                )
+        val response = api.messages(
+            MessagesRout(
+                chatId = ChatId(chatId),
+                messageId = MessageId(""),
+                isDirectionToLatest = false,
+                limit = INIT_SIZE.toLong()
             )
+        )
 
-            val messageEntities = response.items.map {
-                MessageDatabaseEntity(
-                    chatId = chatId,
-                    messageId = it.id.value,
-                    timestamp = it.timestamp,
-                )
-            }
-            val prependKey = messageEntities.lastOrNull()?.messageId
-            remoteKeyDao.updatePrepend(chatId, prependKey)
-            messageDao.update(messageEntities)
-            response.items.size < INIT_SIZE
-        } ?: true
-        endOfPaginationReached
+        val messageEntities = response.items.map {
+            MessageDatabaseEntity(
+                chatId = chatId,
+                messageId = it.id.value,
+                timestamp = it.timestamp,
+            )
+        }
+        messageDao.update(messageEntities)
+        response.items.size < INIT_SIZE
     }
 
     suspend fun append(chatId: String): Boolean = withContext(Dispatchers.IO) {
-        val endOfPaginationReached = remoteKeyDao.remoteKey(chatId)?.appendKey?.let {
-            val response = api.messages(
-                MessagesRout(
-                    chatId = ChatId(chatId),
-                    messageId = MessageId(it),
-                    isDirectionToLatest = true,
-                    limit = INIT_SIZE.toLong()
-                )
+        val response = api.messages(
+            MessagesRout(
+                chatId = ChatId(chatId),
+                messageId = MessageId(""),
+                isDirectionToLatest = true,
+                limit = INIT_SIZE.toLong()
             )
+        )
 
-            val messageEntities = response.items.map {
-                MessageDatabaseEntity(
-                    chatId = chatId,
-                    messageId = it.id.value,
-                    timestamp = it.timestamp,
-                )
-            }
-            val appendKey = messageEntities.lastOrNull()?.messageId
-            remoteKeyDao.updateAppend(chatId, appendKey)
-            messageDao.update(messageEntities)
-            response.items.size < INIT_SIZE
-        } ?: true
-        endOfPaginationReached
+        val messageEntities = response.items.map {
+            MessageDatabaseEntity(
+                chatId = chatId,
+                messageId = it.id.value,
+                timestamp = it.timestamp,
+            )
+        }
+        messageDao.update(messageEntities)
+        response.items.size < INIT_SIZE
     }
 
     companion object {

@@ -13,7 +13,6 @@ class App : Application() {
             .build()
         chatRepo = ChatRepo(db.chatDao())
         messageRepo = MessageRepo(
-            remoteKeyDao = db.remoteKeyDao(),
             messageDao = db.messageDao()
         )
     }

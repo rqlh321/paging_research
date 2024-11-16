@@ -18,6 +18,7 @@ import ru.gubatenko.server.data.suspendTransaction
 import ru.gubatenko.server.data.user.UserTable
 import ru.gubatenko.server.domain.repo.CredentialRepository
 import java.util.Date
+import java.util.UUID
 
 class CredentialRepositoryImpl(
     private val daoStore: DaoStore
@@ -34,6 +35,17 @@ class CredentialRepositoryImpl(
         .firstOrNull()
         ?.id
         ?.let { UserId(it.value.toString()) }
+
+    override suspend fun isTokenExist(
+        tokenId: String,
+        userId: UserId
+    ): Boolean = suspendTransaction {
+        daoStore.credentialDao()
+            .find {
+                (CredentialsTable.id eq UUID.fromString(tokenId)) and
+                        (CredentialsTable.userId eq userId.uuid())
+            }.empty().not()
+    }
 
     override suspend fun createNewCredentials(userId: UserId): Credentials = suspendTransaction {
         val accessCredential = daoStore.credentialDao().new {

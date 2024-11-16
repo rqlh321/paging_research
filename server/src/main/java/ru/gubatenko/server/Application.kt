@@ -14,6 +14,7 @@ import ru.gubatenko.server.domain.repo.ChatRepository
 import ru.gubatenko.server.domain.repo.CredentialRepository
 import ru.gubatenko.server.domain.usecase.CreateMessageUseCase
 import ru.gubatenko.server.domain.usecase.LoginUseCase
+import ru.gubatenko.server.domain.usecase.TokenValidateUseCase
 import ru.gubatenko.server.domain.repo.MessageRepository
 import ru.gubatenko.server.presentation.AuthRouting
 import ru.gubatenko.server.presentation.ChatsRouting
@@ -37,6 +38,7 @@ val dataModule = module {
     singleOf(::UserWebSocketSessionController)
 }
 val useCaseModule = module {
+    singleOf(::TokenValidateUseCase)
     singleOf(::CreateMessageUseCase)
     singleOf(::LoginUseCase)
 }

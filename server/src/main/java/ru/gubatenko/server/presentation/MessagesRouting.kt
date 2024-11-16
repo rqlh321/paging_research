@@ -9,9 +9,8 @@ import ru.gubatenko.common.CreateMessageBody
 import ru.gubatenko.common.CreateMessageRout
 import ru.gubatenko.common.MessagesRout
 import ru.gubatenko.server.RoutingSetup
-import ru.gubatenko.server.domain.usecase.CreateMessageUseCase
-import ru.gubatenko.server.domain.usecase.CreateMessageUseCaseArgs
 import ru.gubatenko.server.domain.repo.MessageRepository
+import ru.gubatenko.server.domain.usecase.CreateMessageUseCase
 
 class MessagesRouting(
     private val repo: MessageRepository,
@@ -27,8 +26,8 @@ class MessagesRouting(
             }
             post<CreateMessageRout, CreateMessageBody> { _, body ->
                 val userId = call.userId()
-                val args = CreateMessageUseCaseArgs(userId, body)
-                val result = createMessageUseCase.run(args)
+                val args = CreateMessageUseCase.Args(userId, body)
+                val result = createMessageUseCase(args)
                 call.respond(result)
             }
         }

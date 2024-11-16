@@ -13,6 +13,6 @@ class AuthRouting(
 ) : RoutingSetup() {
 
     override fun setupRouting(routing: Routing) {
-        routing.post<AuthRout, AuthBody> { _, body -> call.respond(loginUseCase.run(body)) }
+        routing.post<AuthRout, AuthBody> { _, body -> call.respond(loginUseCase(body)) }
     }
 }

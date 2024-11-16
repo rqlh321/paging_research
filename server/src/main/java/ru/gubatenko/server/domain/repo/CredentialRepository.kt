@@ -9,5 +9,7 @@ interface CredentialRepository {
 
     suspend fun checkUserId(username: Username, password: Password): UserId?
 
+    suspend fun isTokenExist(tokenId: String, userId: UserId): Boolean
+
     suspend fun createNewCredentials(userId: UserId): Credentials
 }

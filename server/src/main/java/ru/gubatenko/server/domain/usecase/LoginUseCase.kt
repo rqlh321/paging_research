@@ -7,8 +7,8 @@ import ru.gubatenko.server.domain.repo.CredentialRepository
 
 class LoginUseCase(
     private val repo: CredentialRepository
-) : UseCase<AuthBody>() {
-    override suspend fun run(args: AuthBody): Response {
+) : UseCase<AuthBody, Response>() {
+    override suspend fun invoke(args: AuthBody): Response {
         val userId = repo.checkUserId(args.username, args.password)
             ?: error("Wrong login or password")
         return repo.createNewCredentials(userId)

@@ -10,15 +10,17 @@ import ru.gubatenko.server.domain.repo.MessageRepository
 class CreateMessageUseCase(
     private val dataStore: MessageRepository,
     private val sessionController: UserWebSocketSessionController,
-) : UseCase<CreateMessageUseCaseArgs>() {
-    override suspend fun run(args: CreateMessageUseCaseArgs): Response {
+) : UseCase<CreateMessageUseCase.Args, Response>() {
+    override suspend fun invoke(args: Args): Response {
         val message = dataStore.createMessage(args.userId, args.body)
         sessionController.send(message.senderId, message)
         return message
     }
+
+    data class Args(
+        val userId: UserId,
+        val body: CreateMessageBody,
+    )
 }
 
-data class CreateMessageUseCaseArgs(
-    val userId: UserId,
-    val body: CreateMessageBody,
-)
+
