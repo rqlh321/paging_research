@@ -28,6 +28,12 @@ class ChatPresetViewModel(
     val actions = channel.receiveAsFlow()
 
     init {
+        viewModelScope.launch {
+            App.db.chatDao().upsert(
+                ChatDatabaseEntity("")
+            )
+        }
+
         emptyFlow<List<ChatDatabaseEntity>>()
             .onEach {
                 val chat = it.firstOrNull()

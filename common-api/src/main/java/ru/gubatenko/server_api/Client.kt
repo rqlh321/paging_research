@@ -38,7 +38,7 @@ class Client(
         defaultRequest {
             header(
                 AUTH_HEADER_KEY,
-                AUTH_HEADER_VAL.format(tokenStore.getAccessToken()?.value.orEmpty())
+                AUTH_HEADER_VAL.format(tokenStore.getAccessToken())
             )
             contentType(ContentType.Application.Json)
             url(config.host)

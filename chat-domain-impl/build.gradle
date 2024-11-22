@@ -18,7 +18,7 @@ kotlin {
 }
 
 dependencies {
-    implementation project(':chat-domain')
+    api project(':chat-domain')
     implementation project(':chat-data')
     implementation project(':common-data')
     implementation project(':common-api')
