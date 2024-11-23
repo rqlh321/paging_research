@@ -13,7 +13,7 @@ class ChatViewModel(
     savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-    private val args = savedStateHandle.toRoute<ChatDestination>()
+    private val args = savedStateHandle.toRoute<ChatScreenDestination>()
 
     val pagingDataFlow: Flow<List<MessageItem>> = App.db.messageDao().read()
         .map { it.map { TextMessageItem(it) } }

@@ -54,6 +54,7 @@ android {
     }
 }
 dependencies {
+    implementation project(':network-transport')
     implementation project(":common-data")
     implementation project(":auth-domain-impl")
     implementation project(":chat-domain-impl")

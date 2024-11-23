@@ -20,7 +20,6 @@ dependencies {
     api project(':message-domain')
     implementation project(':message-data')
     implementation project(':common-data')
-    implementation project(':common-api')
 
     implementation(libs.ktor.client.okhttp)
     implementation libs.androidx.room.common

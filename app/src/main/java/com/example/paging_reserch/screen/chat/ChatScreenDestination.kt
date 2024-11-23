@@ -4,7 +4,7 @@ import com.example.paging_reserch.screen.Destination
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatDestination(
+data class ChatScreenDestination(
     val id: String
 ) : Destination()
 

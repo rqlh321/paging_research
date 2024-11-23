@@ -21,7 +21,6 @@ dependencies {
     api project(':chat-domain')
     implementation project(':chat-data')
     implementation project(':common-data')
-    implementation project(':common-api')
 
     implementation(libs.ktor.client.okhttp)
     implementation libs.androidx.room.common

@@ -1,4 +1,4 @@
-package com.example.paging_reserch.screen.preset
+package com.example.paging_reserch.screen.common
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

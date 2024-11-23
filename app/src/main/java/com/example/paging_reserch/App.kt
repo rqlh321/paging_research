@@ -2,6 +2,8 @@ package com.example.paging_reserch
 
 import android.app.Application
 import androidx.room.Room
+import com.example.paging_reserch.screen.Destination
+import kotlinx.coroutines.channels.Channel
 import net.sqlcipher.database.SupportFactory
 
 
@@ -22,5 +24,6 @@ class App : Application() {
 
     companion object {
         lateinit var db: AppDatabase
+        val router = Channel<Destination>()
     }
 }

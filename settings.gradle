@@ -16,7 +16,7 @@ rootProject.name = "paging_reserch"
 include ':app'
 include ':server'
 include ':common-data'
-include ':common-api'
+include ':network-transport'
 include ':auth-domain'
 include ':auth-domain-impl'
 include ':auth-data'
