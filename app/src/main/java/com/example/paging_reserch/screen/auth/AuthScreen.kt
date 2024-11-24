@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,8 +27,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -67,7 +70,9 @@ fun AuthScreen() {
         changePassword = viewModel::changePassword,
         changePasswordVisibility = viewModel::changePasswordVisibility,
         onTextFieldFocused = viewModel::onTextFieldFocused,
-        onLoginClick = viewModel::onLoginClick
+        onLoginClick = viewModel::onLoginClick,
+        onCreateAccountClick = viewModel::onCreateAccountClick,
+        onRestoreAccountClick = viewModel::onRestoreAccountClick,
     )
 }
 
@@ -87,6 +92,8 @@ private fun AuthScreenContent(
     changePasswordVisibility: () -> Unit = {},
     onTextFieldFocused: (FocusState) -> Unit = {},
     onLoginClick: () -> Unit = {},
+    onCreateAccountClick: () -> Unit = {},
+    onRestoreAccountClick: () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -96,6 +103,8 @@ private fun AuthScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Spacer(Modifier.weight(1f))
+
             val focusManager = LocalFocusManager.current
 
             val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
@@ -190,6 +199,20 @@ private fun AuthScreenContent(
 
             }
 
+            Spacer(Modifier.weight(1f))
+
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onCreateAccountClick,
+            ) {
+                Text("Create account")
+            }
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onRestoreAccountClick,
+            ) {
+                Text("Restore account")
+            }
         }
     }
 }

@@ -11,19 +11,28 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.paging_reserch.App
-import com.example.paging_reserch.screen.main.MainScreenDestination
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.gubatenko.common.Password
+import ru.gubatenko.common.Username
+import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
+import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
 
 class AuthViewModel(
     app: Application,
     savedStateHandle: SavedStateHandle,
 ) : AndroidViewModel(app) {
+
+    private val isLoginAvailableUseCase: IsLoginAvailableUseCase = IsLoginAvailableUseCaseImpl()
+
+    private var loginJob: Job? = null
 
     var loginErrorMessage by mutableStateOf("")
         private set
@@ -44,11 +53,11 @@ class AuthViewModel(
 
     val isLoginEnabled: StateFlow<Boolean> = combine(
         snapshotFlow { isLoginInProgress },
-        snapshotFlow { username }.mapLatest { it.text },
-        snapshotFlow { password }.mapLatest { it.text },
-    ) { loginInProgress, username, password ->
-        !loginInProgress && username.isNotBlank() && password.isNotBlank()
-    }
+        snapshotFlow { username }.map { Username(it.text) },
+        snapshotFlow { password }.map { Password(it.text) },
+        IsLoginAvailableUseCase::Args
+    ).mapLatest(isLoginAvailableUseCase)
+        .map { it.isValid }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -76,24 +85,36 @@ class AuthViewModel(
     }
 
     fun onLoginClick() {
-        viewModelScope.launch {
-            isPasswordVisible = false
-            usernameInputEnabled = false
-            passwordInputEnabled = false
-            isLoginInProgress = true
-            delay(2000)
-            loginErrorMessage = "Wrong e-mail or password"
-            isLoginInProgress = false
-            usernameInputEnabled = true
-            passwordInputEnabled = true
-            password = TextFieldValue()
+        loginJob = viewModelScope.launch {
+            try {
+                isPasswordVisible = false
+                usernameInputEnabled = false
+                passwordInputEnabled = false
+                isLoginInProgress = true
+                delay(2000)
+                loginErrorMessage = "Wrong e-mail or password"
+            } finally {
+                isLoginInProgress = false
+                usernameInputEnabled = true
+                passwordInputEnabled = true
+                password = TextFieldValue()
+            }
         }
-
     }
 
-    fun navigateToMain() {
+    fun onCreateAccountClick() {
         viewModelScope.launch {
-            App.router.send(MainScreenDestination)
+            loginErrorMessage = ""
+            App.router.send(CreateAccountScreenDestination)
+            loginJob?.cancel()
+        }
+    }
+
+    fun onRestoreAccountClick() {
+        viewModelScope.launch {
+            loginErrorMessage = ""
+            App.router.send(RestoreAccountScreenDestination)
+            loginJob?.cancel()
         }
     }
 }
