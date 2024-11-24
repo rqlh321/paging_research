@@ -5,12 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.paging_reserch.App
 import com.example.paging_reserch.screen.main.MainScreenDestination
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -23,18 +25,25 @@ class AuthViewModel(
     savedStateHandle: SavedStateHandle,
 ) : AndroidViewModel(app) {
 
-    var loginInProgress by mutableStateOf(false)
+    var loginErrorMessage by mutableStateOf("")
         private set
+    var isLoginInProgress by mutableStateOf(false)
+        private set
+
     var username by mutableStateOf(TextFieldValue())
         private set
     var usernameInputEnabled by mutableStateOf(true)
         private set
+
     var password by mutableStateOf(TextFieldValue())
         private set
     var passwordInputEnabled by mutableStateOf(true)
         private set
+    var isPasswordVisible by mutableStateOf(false)
+        private set
+
     val isLoginEnabled: StateFlow<Boolean> = combine(
-        snapshotFlow { loginInProgress },
+        snapshotFlow { isLoginInProgress },
         snapshotFlow { username }.mapLatest { it.text },
         snapshotFlow { password }.mapLatest { it.text },
     ) { loginInProgress, username, password ->
@@ -46,22 +55,40 @@ class AuthViewModel(
             initialValue = false
         )
 
-//    val isLoginEnabled by derivedStateOf {
-//        username.text.isNotBlank() && password.text.isNotBlank()
-//    }
-
     fun changeLogin(value: TextFieldValue) {
+        loginErrorMessage = ""
         username = value
     }
 
     fun changePassword(value: TextFieldValue) {
+        loginErrorMessage = ""
         password = value
     }
 
+    fun changePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+    }
+
+    fun onTextFieldFocused(state: FocusState) {
+        if (state.isFocused) {
+            loginErrorMessage = ""
+        }
+    }
+
     fun onLoginClick() {
-        usernameInputEnabled = false
-        passwordInputEnabled = false
-        loginInProgress = true
+        viewModelScope.launch {
+            isPasswordVisible = false
+            usernameInputEnabled = false
+            passwordInputEnabled = false
+            isLoginInProgress = true
+            delay(2000)
+            loginErrorMessage = "Wrong e-mail or password"
+            isLoginInProgress = false
+            usernameInputEnabled = true
+            passwordInputEnabled = true
+            password = TextFieldValue()
+        }
+
     }
 
     fun navigateToMain() {
