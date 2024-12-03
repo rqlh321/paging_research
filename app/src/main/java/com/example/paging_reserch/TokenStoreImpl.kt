@@ -37,6 +37,9 @@ class TokenStoreImpl(
         sharedPreferences.getString(REFRESH_TOKEN, null).orEmpty()
     )
 
+    override fun isAuthorized() = sharedPreferences.contains(ACCESS_TOKEN) &&
+            sharedPreferences.contains(REFRESH_TOKEN)
+
     companion object {
         private const val SECRET_FILE_NAME = "secret_shared_prefs"
         private const val ACCESS_TOKEN = "access_token"

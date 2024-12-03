@@ -1,14 +1,13 @@
 package com.example.paging_reserch.screen.auth
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.paging_reserch.App
 import kotlinx.coroutines.Job
@@ -26,9 +25,8 @@ import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
 import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
 
 class AuthViewModel(
-    app: Application,
-    savedStateHandle: SavedStateHandle,
-) : AndroidViewModel(app) {
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val isLoginAvailableUseCase: IsLoginAvailableUseCase = IsLoginAvailableUseCaseImpl()
 

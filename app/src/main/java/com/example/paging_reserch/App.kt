@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.paging_reserch.screen.Destination
 import kotlinx.coroutines.channels.Channel
 import net.sqlcipher.database.SupportFactory
+import ru.gubatenko.credential.store.TokenStore
 
 
 class App : Application() {
@@ -20,9 +21,11 @@ class App : Application() {
         val repo = PassphraseRepository(this)
         builder.openHelperFactory(SupportFactory(repo.getPassphrase()))
         db = builder.build()
+        tokenStore = TokenStoreImpl(this)
     }
 
     companion object {
+        lateinit var tokenStore: TokenStore
         lateinit var db: AppDatabase
         val router = Channel<Destination>()
     }

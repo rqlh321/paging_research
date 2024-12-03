@@ -7,4 +7,5 @@ abstract class TokenStore {
     abstract fun update(accessToken: AccessToken, refreshToken: RefreshToken)
     abstract fun getAccessToken(): AccessToken
     abstract fun getRefreshToken(): RefreshToken
+    abstract fun isAuthorized(): Boolean
 }

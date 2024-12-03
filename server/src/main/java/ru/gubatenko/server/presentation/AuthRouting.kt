@@ -1,5 +1,6 @@
 package ru.gubatenko.server.presentation
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
@@ -13,6 +14,13 @@ class AuthRouting(
 ) : RoutingSetup() {
 
     override fun setupRouting(routing: Routing) {
-        routing.post<AuthRout, AuthBody> { _, body -> call.respond(loginUseCase(body)) }
+        routing.post<AuthRout, AuthBody> { _, body ->
+            val response = loginUseCase(body)
+            if (response == null) {
+                call.respond(HttpStatusCode.Gone)
+            } else {
+                call.respond(response)
+            }
+        }
     }
 }

@@ -3,42 +3,34 @@ package com.example.paging_reserch
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.paging_reserch.screen.auth.AuthScreen
-import com.example.paging_reserch.screen.auth.AuthScreenDestination
-import com.example.paging_reserch.screen.auth.CreateAccountScreenDestination
-import com.example.paging_reserch.screen.auth.RestoreAccountScreenDestination
-import com.example.paging_reserch.screen.chat.ChatScreen
-import com.example.paging_reserch.screen.chat.ChatScreenDestination
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.paging_reserch.screen.Destination
+import com.example.paging_reserch.screen.root.RootScreen
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
         setContent {
-            val navController = rememberNavController()
-
-            LaunchedEffect(Unit) {
-                App.router.receiveAsFlow().collectLatest { navController.navigate(it) }
-            }
-
-            MaterialTheme {
-                NavHost(
-                    navController = navController,
-                    startDestination = AuthScreenDestination
-                ) {
-                    composable<AuthScreenDestination> { AuthScreen() }
-                    composable<CreateAccountScreenDestination> { }
-                    composable<RestoreAccountScreenDestination> { }
-                    composable<ChatScreenDestination> { ChatScreen() }
+            val viewModel = viewModel<RootScreenViewModel>()
+            val state by viewModel.state.collectAsState()
+            when (state) {
+                is MainActivityState.Defined -> {
+                    RootScreen((state as MainActivityState.Defined).startDestination)
                 }
+
+                is MainActivityState.Undefined -> Unit
             }
         }
     }
+}
+
+sealed class MainActivityState {
+    data object Undefined : MainActivityState()
+    data class Defined(val startDestination: Destination) : MainActivityState()
 }
