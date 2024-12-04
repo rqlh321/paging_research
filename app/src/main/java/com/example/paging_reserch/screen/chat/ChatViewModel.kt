@@ -1,21 +1,21 @@
 package com.example.paging_reserch.screen.chat
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
 import com.example.paging_reserch.App
+import com.example.paging_reserch.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ChatViewModel(
-    app: Application,
-    savedStateHandle: SavedStateHandle
-) : AndroidViewModel(app) {
+    savedStateHandle: SavedStateHandle,
+    private val db: AppDatabase,
+) : ViewModel() {
 
     private val args = savedStateHandle.toRoute<ChatScreenDestination>()
 
-    val pagingDataFlow: Flow<List<MessageItem>> = App.db.messageDao().read()
+    val pagingDataFlow: Flow<List<MessageItem>> = db.messageDao().read()
         .map { it.map { TextMessageItem(it) } }
 
 }

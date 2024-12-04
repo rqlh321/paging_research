@@ -11,12 +11,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.paging_reserch.screen.chat.compose.Message
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ChatScreen() {
-    val viewModel = viewModel<ChatViewModel>()
+    val viewModel = koinViewModel<ChatViewModel>()
     val messages by viewModel.pagingDataFlow.collectAsState(emptyList())
 
     ChatScreenContent(messages)

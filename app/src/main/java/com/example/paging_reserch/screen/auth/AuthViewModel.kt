@@ -9,8 +9,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.paging_reserch.App
+import com.example.paging_reserch.screen.Destination
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +26,8 @@ import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
 import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
 
 class AuthViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val router: Channel<Destination>,
 ) : ViewModel() {
 
     private val isLoginAvailableUseCase: IsLoginAvailableUseCase = IsLoginAvailableUseCaseImpl()
@@ -103,7 +105,7 @@ class AuthViewModel(
     fun onCreateAccountClick() {
         viewModelScope.launch {
             loginErrorMessage = ""
-            App.router.send(CreateAccountScreenDestination)
+            router.send(CreateAccountScreenDestination)
             loginJob?.cancel()
         }
     }
@@ -111,7 +113,7 @@ class AuthViewModel(
     fun onRestoreAccountClick() {
         viewModelScope.launch {
             loginErrorMessage = ""
-            App.router.send(RestoreAccountScreenDestination)
+            router.send(RestoreAccountScreenDestination)
             loginJob?.cancel()
         }
     }

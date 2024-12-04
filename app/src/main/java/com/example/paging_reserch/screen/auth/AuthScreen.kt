@@ -48,9 +48,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.paging_reserch.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AuthScreen(viewModel: AuthViewModel) {
+fun AuthScreen() {
+    val viewModel = koinViewModel<AuthViewModel>()
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsStateWithLifecycle()
 
     AuthScreenContent(
@@ -91,7 +93,9 @@ private fun AuthScreenContent(
     onCreateAccountClick: () -> Unit = {},
     onRestoreAccountClick: () -> Unit = {},
 ) = Column(
-    modifier = Modifier.fillMaxSize().padding(16.dp),
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center
 ) {

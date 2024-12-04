@@ -60,9 +60,10 @@ dependencies {
     implementation project(":chat-domain-impl")
     implementation project(":message-domain-impl")
 
+    implementation libs.koin.androidx.compose
+
     implementation libs.kotlinx.serialization.json
     implementation libs.androidx.core.ktx
-    implementation libs.androidx.core.splashscreen
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.activity.compose
