@@ -26,7 +26,7 @@ import ru.gubatenko.common.Response
 import ru.gubatenko.credential.store.TokenStore
 
 class Client(
-    private val config: ClientConfig = ClientConfig(),
+    private val config: ClientConfig,
     private val tokenStore: TokenStore
 ) {
     val httpClient = HttpClient(OkHttp) {

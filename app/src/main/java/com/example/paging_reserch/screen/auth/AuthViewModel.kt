@@ -10,9 +10,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.paging_reserch.screen.Destination
+import com.example.paging_reserch.screen.main.MainScreenDestination
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -23,14 +24,14 @@ import kotlinx.coroutines.launch
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
 import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
-import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
+import ru.gubatenko.domain.auth.LoginUseCase
 
 class AuthViewModel(
     savedStateHandle: SavedStateHandle,
     private val router: Channel<Destination>,
+    private val loginUseCase: LoginUseCase,
+    private val isLoginAvailableUseCase: IsLoginAvailableUseCase,
 ) : ViewModel() {
-
-    private val isLoginAvailableUseCase: IsLoginAvailableUseCase = IsLoginAvailableUseCaseImpl()
 
     private var loginJob: Job? = null
 
@@ -85,14 +86,24 @@ class AuthViewModel(
     }
 
     fun onLoginClick() {
-        loginJob = viewModelScope.launch {
+        loginJob = viewModelScope.launch(Dispatchers.IO) {
             try {
                 isPasswordVisible = false
                 usernameInputEnabled = false
                 passwordInputEnabled = false
                 isLoginInProgress = true
-                delay(2000)
-                loginErrorMessage = "Wrong e-mail or password"
+                val args = LoginUseCase.Args.ByPassword(
+                    username = Username(username.text),
+                    password = Password(password.text),
+                )
+                when (loginUseCase(args)) {
+                    is LoginUseCase.Result.Success -> router.send(MainScreenDestination)
+                    is LoginUseCase.Result.ConnectionFail -> loginErrorMessage =
+                        "Connection fail, check your internet connection"
+
+                    is LoginUseCase.Result.WrongCredentials -> loginErrorMessage =
+                        "Wrong login or password"
+                }
             } finally {
                 isLoginInProgress = false
                 usernameInputEnabled = true
@@ -117,4 +128,5 @@ class AuthViewModel(
             loginJob?.cancel()
         }
     }
+
 }

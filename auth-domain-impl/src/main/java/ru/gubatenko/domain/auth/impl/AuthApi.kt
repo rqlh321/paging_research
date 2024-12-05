@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 import ru.gubatenko.auth.data.AuthBody
 import ru.gubatenko.auth.data.AuthRout
@@ -21,8 +22,7 @@ class AuthApi(
         if (httpResponse.status.isSuccess()) {
             return httpResponse.body<Credentials>()
         } else {
-            error(httpResponse.status.description)
+            throw BadRequestResponseStatus(httpResponse.status)
         }
     }
-
 }

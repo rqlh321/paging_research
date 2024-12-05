@@ -6,6 +6,7 @@ import com.example.paging_reserch.screen.Destination
 import com.example.paging_reserch.screen.auth.AuthViewModel
 import com.example.paging_reserch.screen.chat.ChatViewModel
 import com.example.paging_reserch.screen.root.RootScreenViewModel
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.channels.Channel
 import net.sqlcipher.database.SupportFactory
 import org.koin.android.ext.koin.androidContext
@@ -16,6 +17,13 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import ru.gubatenko.credential.store.TokenStore
+import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
+import ru.gubatenko.domain.auth.LoginUseCase
+import ru.gubatenko.domain.auth.impl.AuthApi
+import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
+import ru.gubatenko.domain.auth.impl.LoginUseCaseImpl
+import ru.gubatenko.server_api.Client
+import ru.gubatenko.server_api.ClientConfig
 
 class App : Application() {
     override fun onCreate() {
@@ -26,10 +34,15 @@ class App : Application() {
             modules(
                 navigationModule,
                 tokenModule,
+                networkTransportModule,
                 databaseModule,
+
+                rootModule,
+                chatModule,
                 authModule
             )
         }
+        ClientConfig()
     }
 }
 
@@ -38,6 +51,11 @@ val navigationModule = module {
 }
 val tokenModule = module {
     singleOf(::TokenStoreImpl) { bind<TokenStore>() }
+}
+val networkTransportModule = module {
+    single { ClientConfig() }
+    singleOf(::Client)
+    single<HttpClient> { get<Client>().httpClient }
 }
 val databaseModule = module {
     singleOf(::PassphraseRepository)
@@ -54,8 +72,16 @@ val databaseModule = module {
     }
 }
 
-val authModule = module {
-    viewModelOf(::AuthViewModel)
-    viewModelOf(::ChatViewModel)
+val rootModule = module {
     viewModelOf(::RootScreenViewModel)
+}
+val chatModule = module {
+    viewModelOf(::ChatViewModel)
+}
+
+val authModule = module {
+    singleOf(::AuthApi)
+    singleOf(::IsLoginAvailableUseCaseImpl) { bind<IsLoginAvailableUseCase>() }
+    singleOf(::LoginUseCaseImpl) { bind<LoginUseCase>() }
+    viewModelOf(::AuthViewModel)
 }

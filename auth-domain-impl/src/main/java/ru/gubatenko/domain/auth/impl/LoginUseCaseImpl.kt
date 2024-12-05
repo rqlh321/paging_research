@@ -1,9 +1,10 @@
 package ru.gubatenko.domain.auth.impl
 
-import kotlinx.coroutines.CancellationException
 import ru.gubatenko.auth.data.AuthBody
 import ru.gubatenko.credential.store.TokenStore
 import ru.gubatenko.domain.auth.LoginUseCase
+import java.io.IOException
+import java.net.ConnectException
 
 class LoginUseCaseImpl(
     private val api: AuthApi,
@@ -20,9 +21,11 @@ class LoginUseCaseImpl(
         val result = api.auth(body)
         tokenStore.update(result.accessToken, result.refreshToken)
         Result.Success
-    } catch (cancellationException: CancellationException) {
-        throw cancellationException
-    } catch (e: Exception) {
-        Result.Fail
+    } catch (e: ConnectException) {
+        Result.ConnectionFail
+    } catch (e: IOException) {
+        Result.ConnectionFail
+    } catch (e: BadRequestResponseStatus) {
+        Result.WrongCredentials
     }
 }

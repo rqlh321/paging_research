@@ -10,6 +10,7 @@ abstract class LoginUseCase : suspend (LoginUseCase.Args) -> LoginUseCase.Result
 
     sealed class Result {
         data object Success : Result()
-        data object Fail : Result()
+        data object WrongCredentials : Result()
+        data object ConnectionFail : Result()
     }
 }
