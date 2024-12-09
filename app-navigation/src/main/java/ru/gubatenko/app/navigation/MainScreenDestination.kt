@@ -1,6 +1,5 @@
-package com.example.paging_reserch.screen.main
+package ru.gubatenko.app.navigation
 
-import com.example.paging_reserch.screen.Destination
 import kotlinx.serialization.Serializable
 
 @Serializable

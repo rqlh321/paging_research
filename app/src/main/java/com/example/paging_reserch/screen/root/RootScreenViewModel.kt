@@ -2,7 +2,7 @@ package com.example.paging_reserch.screen.root
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.paging_reserch.screen.Destination
+import ru.gubatenko.app.navigation.Destination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

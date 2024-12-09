@@ -70,6 +70,4 @@ jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serializati
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
-
-
+android-library = { id = "com.android.library", version.ref = "agp" }

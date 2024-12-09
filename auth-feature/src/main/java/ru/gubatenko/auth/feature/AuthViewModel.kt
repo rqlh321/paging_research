@@ -1,4 +1,4 @@
-package com.example.paging_reserch.screen.auth
+package ru.gubatenko.auth.feature
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,8 +9,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.paging_reserch.screen.Destination
-import com.example.paging_reserch.screen.main.MainScreenDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -21,6 +19,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.gubatenko.app.navigation.auth.CreateAccountScreenDestination
+import ru.gubatenko.app.navigation.Destination
+import ru.gubatenko.app.navigation.MainScreenDestination
+import ru.gubatenko.app.navigation.auth.RestoreAccountScreenDestination
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
 import ru.gubatenko.domain.auth.IsLoginAvailableUseCase

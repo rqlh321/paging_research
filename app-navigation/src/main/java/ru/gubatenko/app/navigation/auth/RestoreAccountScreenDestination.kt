@@ -1,7 +1,7 @@
-package com.example.paging_reserch.screen.auth
+package ru.gubatenko.app.navigation.auth
 
-import com.example.paging_reserch.screen.Destination
 import kotlinx.serialization.Serializable
+import ru.gubatenko.app.navigation.Destination
 
 @Serializable
 data object RestoreAccountScreenDestination : Destination()

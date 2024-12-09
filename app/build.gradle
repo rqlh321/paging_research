@@ -54,28 +54,29 @@ android {
     }
 }
 dependencies {
+    implementation project(":credential-domain")
+    implementation project(':app-navigation')
     implementation project(':network-transport')
     implementation project(":common-data")
-    implementation project(":auth-domain-impl")
+    implementation project(":auth-feature")
     implementation project(":chat-domain-impl")
     implementation project(":message-domain-impl")
 
+    implementation libs.androidx.security.crypto
+
     implementation libs.koin.androidx.compose
 
-    implementation libs.kotlinx.serialization.json
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.activity.compose
     implementation libs.androidx.navigation.compose
-    implementation libs.androidx.material.icons.extended
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.ui
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
-    implementation libs.androidx.security.crypto
 
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest

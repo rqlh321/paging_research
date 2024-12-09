@@ -8,15 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.paging_reserch.screen.Destination
-import com.example.paging_reserch.screen.auth.AuthGraph
-import com.example.paging_reserch.screen.auth.AuthScreen
-import com.example.paging_reserch.screen.auth.AuthScreenDestination
-import com.example.paging_reserch.screen.auth.CreateAccountScreenDestination
-import com.example.paging_reserch.screen.auth.RestoreAccountScreenDestination
+import ru.gubatenko.app.navigation.Destination
+import ru.gubatenko.app.navigation.auth.AuthGraph
+import ru.gubatenko.auth.feature.AuthScreen
+import ru.gubatenko.app.navigation.auth.AuthScreenDestination
+import ru.gubatenko.app.navigation.auth.CreateAccountScreenDestination
+import ru.gubatenko.app.navigation.auth.RestoreAccountScreenDestination
 import com.example.paging_reserch.screen.chat.ChatScreen
-import com.example.paging_reserch.screen.chat.ChatScreenDestination
-import com.example.paging_reserch.screen.main.MainScreenDestination
+import ru.gubatenko.app.navigation.ChatScreenDestination
+import ru.gubatenko.app.navigation.MainScreenDestination
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 

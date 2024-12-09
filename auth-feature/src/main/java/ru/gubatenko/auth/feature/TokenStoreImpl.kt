@@ -1,4 +1,4 @@
-package com.example.paging_reserch
+package ru.gubatenko.auth.feature
 
 import android.content.Context
 import android.content.SharedPreferences

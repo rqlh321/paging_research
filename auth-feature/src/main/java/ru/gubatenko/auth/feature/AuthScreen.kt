@@ -1,4 +1,4 @@
-package com.example.paging_reserch.screen.auth
+package ru.gubatenko.auth.feature
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
@@ -38,7 +38,6 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,7 +46,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.paging_reserch.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -112,7 +110,7 @@ private fun AuthScreenContent(
     )
 
     Icon(
-        painter = painterResource(R.drawable.ic_launcher_foreground),
+        imageVector = Icons.Filled.Visibility,
         contentDescription = "",
         tint = if (isLoginInProgress) animatedColor else LocalContentColor.current
     )

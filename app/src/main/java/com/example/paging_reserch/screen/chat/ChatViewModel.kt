@@ -3,10 +3,10 @@ package com.example.paging_reserch.screen.chat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
-import com.example.paging_reserch.App
 import com.example.paging_reserch.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ru.gubatenko.app.navigation.ChatScreenDestination
 
 class ChatViewModel(
     savedStateHandle: SavedStateHandle,
