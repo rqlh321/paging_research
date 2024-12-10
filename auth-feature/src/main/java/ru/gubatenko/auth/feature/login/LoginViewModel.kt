@@ -1,4 +1,4 @@
-package ru.gubatenko.auth.feature
+package ru.gubatenko.auth.feature.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -19,18 +18,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import ru.gubatenko.app.navigation.auth.CreateAccountScreenDestination
-import ru.gubatenko.app.navigation.Destination
-import ru.gubatenko.app.navigation.MainScreenDestination
-import ru.gubatenko.app.navigation.auth.RestoreAccountScreenDestination
+import ru.gubatenko.app.navigation.AuthRout
+import ru.gubatenko.app.navigation.RootRout
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
 import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
 import ru.gubatenko.domain.auth.LoginUseCase
 
-class AuthViewModel(
-    savedStateHandle: SavedStateHandle,
-    private val router: Channel<Destination>,
+class LoginViewModel(
+    private val routerRoot: Channel<RootRout>,
+    private val routerAuth: Channel<AuthRout>,
     private val loginUseCase: LoginUseCase,
     private val isLoginAvailableUseCase: IsLoginAvailableUseCase,
 ) : ViewModel() {
@@ -99,7 +96,7 @@ class AuthViewModel(
                     password = Password(password.text),
                 )
                 when (loginUseCase(args)) {
-                    is LoginUseCase.Result.Success -> router.send(MainScreenDestination)
+                    is LoginUseCase.Result.Success -> routerRoot.send(RootRout.MainScreenDestination)
                     is LoginUseCase.Result.ConnectionFail -> loginErrorMessage =
                         "Connection fail, check your internet connection"
 
@@ -118,7 +115,7 @@ class AuthViewModel(
     fun onCreateAccountClick() {
         viewModelScope.launch {
             loginErrorMessage = ""
-            router.send(CreateAccountScreenDestination)
+            routerAuth.send(AuthRout.CreateAccount)
             loginJob?.cancel()
         }
     }
@@ -126,7 +123,7 @@ class AuthViewModel(
     fun onRestoreAccountClick() {
         viewModelScope.launch {
             loginErrorMessage = ""
-            router.send(RestoreAccountScreenDestination)
+            routerAuth.send(AuthRout.RestoreAccount)
             loginJob?.cancel()
         }
     }

@@ -2,7 +2,7 @@ package com.example.paging_reserch.screen.root
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ru.gubatenko.app.navigation.Destination
+import ru.gubatenko.app.navigation.RootRout
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import ru.gubatenko.credential.store.TokenStore
 
 class RootScreenViewModel(
-    channel: Channel<Destination>,
+    channel: Channel<RootRout>,
     private val tokenStore: TokenStore,
 ) : ViewModel() {
 

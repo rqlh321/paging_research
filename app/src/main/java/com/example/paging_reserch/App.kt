@@ -13,7 +13,7 @@ import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import ru.gubatenko.app.navigation.Destination
+import ru.gubatenko.app.navigation.RootRout
 import ru.gubatenko.auth.feature.authModule
 import ru.gubatenko.server_api.Client
 import ru.gubatenko.server_api.ClientConfig
@@ -25,7 +25,6 @@ class App : Application() {
             androidLogger()
             androidContext(this@App)
             modules(
-                navigationModule,
                 networkTransportModule,
                 databaseModule,
 
@@ -37,9 +36,6 @@ class App : Application() {
     }
 }
 
-val navigationModule = module {
-    single { Channel<Destination>() }
-}
 val networkTransportModule = module {
     single { ClientConfig() }
     singleOf(::Client)
@@ -61,6 +57,7 @@ val databaseModule = module {
 }
 
 val rootModule = module {
+    single { Channel<RootRout>() }
     viewModelOf(::RootScreenViewModel)
 }
 val chatModule = module {

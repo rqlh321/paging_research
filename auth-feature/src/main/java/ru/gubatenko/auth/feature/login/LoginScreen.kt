@@ -1,4 +1,4 @@
-package ru.gubatenko.auth.feature
+package ru.gubatenko.auth.feature.login
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
@@ -46,11 +46,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AuthScreen() {
-    val viewModel = koinViewModel<AuthViewModel>()
+fun AuthScreen(viewModel: LoginViewModel) {
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsStateWithLifecycle()
 
     AuthScreenContent(
