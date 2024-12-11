@@ -3,12 +3,17 @@ package ru.gubatenko.app.navigation
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
+data class PopUpData(
+    val popUpTo: KClass<*>,
+    val inclusive: Boolean
+)
+
 sealed class RootRout {
-    open val popUpTo: KClass<out RootRout>? = null
+    open val popUpData: PopUpData? = null
 
     @Serializable
-    data object MainScreenDestination : RootRout(){
-        override val popUpTo = AuthGraph::class
+    data object MainScreenDestination : RootRout() {
+        override val popUpData = PopUpData(AuthGraph::class, true)
     }
 
     @Serializable

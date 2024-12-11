@@ -1,5 +1,6 @@
 package com.example.paging_reserch.screen.root
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +28,7 @@ fun RootScreen() {
     RootContent(startDestination, viewModel)
 }
 
+@SuppressLint("RestrictedApi")
 @Composable
 private fun RootContent(
     startDestination: RootRout,
@@ -37,7 +39,8 @@ private fun RootContent(
     LaunchedEffect(Unit) {
         viewModel.routing.collectLatest {
             navController.navigate(it) {
-                popUpTo<RootRout.AuthGraph> { inclusive = true }
+                val popUpData = it.popUpData ?: return@navigate
+                popUpTo(popUpData.popUpTo) { inclusive = popUpData.inclusive }
             }
         }
     }
