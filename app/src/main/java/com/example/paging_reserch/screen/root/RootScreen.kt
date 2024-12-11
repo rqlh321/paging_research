@@ -35,7 +35,11 @@ private fun RootContent(
     val navController = rememberNavController()
 
     LaunchedEffect(Unit) {
-        viewModel.routing.collectLatest { navController.navigate(it) }
+        viewModel.routing.collectLatest {
+            navController.navigate(it) {
+                popUpTo<RootRout.AuthGraph> { inclusive = true }
+            }
+        }
     }
     NavHost(
         navController = navController,

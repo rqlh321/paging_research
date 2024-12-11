@@ -46,9 +46,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.scope.Scope
 
 @Composable
-fun AuthScreen(viewModel: LoginViewModel) {
+fun LoginScreen(authScop: Scope) {
+    val viewModel = koinViewModel<LoginViewModel>(scope = authScop)
+
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsStateWithLifecycle()
 
     AuthScreenContent(

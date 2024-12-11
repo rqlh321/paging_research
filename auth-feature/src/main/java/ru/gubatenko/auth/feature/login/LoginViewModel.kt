@@ -32,6 +32,15 @@ class LoginViewModel(
     private val isLoginAvailableUseCase: IsLoginAvailableUseCase,
 ) : ViewModel() {
 
+    init {
+        println("Init LoginViewModel ${hashCode()}!")
+    }
+
+    override fun onCleared() {
+        println("Clear LoginViewModel ${hashCode()}!")
+        super.onCleared()
+    }
+
     private var loginJob: Job? = null
 
     var loginErrorMessage by mutableStateOf("")

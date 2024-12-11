@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import ru.gubatenko.app.navigation.AuthRout
-import ru.gubatenko.auth.feature.login.AuthScreen
+import ru.gubatenko.auth.feature.login.LoginScreen
 
 @Composable
 fun AuthRootScreen() {
@@ -26,8 +26,8 @@ fun AuthRootScreen() {
         navController = navController,
         startDestination = startDestination
     ) {
-        composable<AuthRout.Login> { AuthScreen(viewModel.scope.get()) }
-        composable<AuthRout.CreateAccount> { }
-        composable<AuthRout.RestoreAccount> { }
+        composable<AuthRout.Login> { LoginScreen(viewModel.scope) }
+        composable<AuthRout.CreateAccount> {}
+        composable<AuthRout.RestoreAccount> {}
     }
 }
