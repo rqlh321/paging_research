@@ -14,13 +14,4 @@ class AuthRootViewModel : ScopeViewModel() {
 
     private val channel by scope.inject<Channel<AuthRout>>(named<AuthRout>())
     val routing = channel.receiveAsFlow()
-
-    init {
-        println("Init AuthRootViewModel ${hashCode()}!")
-    }
-
-    override fun onCleared() {
-        println("Clear AuthRootViewModel ${hashCode()}!")
-        super.onCleared()
-    }
 }

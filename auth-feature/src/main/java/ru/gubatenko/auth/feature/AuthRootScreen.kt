@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import ru.gubatenko.app.navigation.AuthRout
+import ru.gubatenko.auth.feature.create.CreateAccountScreen
 import ru.gubatenko.auth.feature.login.LoginScreen
 
 @Composable
@@ -19,7 +20,12 @@ fun AuthRootScreen() {
     val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.routing.collectLatest { navController.navigate(it) }
+        viewModel.routing.collectLatest {
+            when (it) {
+                is AuthRout.GoBack -> navController.popBackStack()
+                else -> navController.navigate(it)
+            }
+        }
     }
 
     NavHost(
@@ -27,7 +33,6 @@ fun AuthRootScreen() {
         startDestination = startDestination
     ) {
         composable<AuthRout.Login> { LoginScreen(viewModel.scope) }
-        composable<AuthRout.CreateAccount> {}
-        composable<AuthRout.RestoreAccount> {}
+        composable<AuthRout.CreateAccount> { CreateAccountScreen(viewModel.scope) }
     }
 }

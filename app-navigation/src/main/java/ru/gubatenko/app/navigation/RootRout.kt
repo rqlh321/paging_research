@@ -24,12 +24,12 @@ sealed class RootRout {
 }
 
 sealed class AuthRout {
+
+    data object GoBack : AuthRout()
+
     @Serializable
     data object Login : AuthRout()
 
     @Serializable
     data object CreateAccount : AuthRout()
-
-    @Serializable
-    data object RestoreAccount : AuthRout()
 }
