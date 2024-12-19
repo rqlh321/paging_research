@@ -27,14 +27,14 @@ class CredentialRepositoryImpl(
     override suspend fun checkUserId(
         username: Username,
         password: Password
-    ) = suspendTransaction{ daoStore.userDao()
-        .find {
-            (UserTable.username eq username.value) and
-                    (UserTable.password eq password.value)
-        }
-        .firstOrNull()
-        ?.id
-        ?.let { UserId(it.value.toString()) }
+    ) = suspendTransaction {
+        daoStore.userDao()
+            .find {
+                (UserTable.username eq username.value) and (UserTable.password eq password.value)
+            }
+            .firstOrNull()
+            ?.id
+            ?.let { UserId(it.value.toString()) }
     }
 
     override suspend fun isTokenExist(

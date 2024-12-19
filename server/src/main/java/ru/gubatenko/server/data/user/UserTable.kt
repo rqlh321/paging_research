@@ -8,7 +8,7 @@ import java.util.UUID
 
 object UserTable : UUIDTable("user") {
     val displayName = varchar("display_name", 50)
-    val username = varchar("username", 50)
+    val username = varchar("username", 50).uniqueIndex()
     val password = varchar("password", 50)
 }
 

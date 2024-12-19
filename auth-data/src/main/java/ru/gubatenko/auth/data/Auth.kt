@@ -9,8 +9,11 @@ import ru.gubatenko.common.RefreshToken
 import ru.gubatenko.common.Response
 import ru.gubatenko.common.Username
 
-@Resource(ApiRouts.AUTH)
-data object AuthRout
+@Resource(ApiRouts.LOGIN)
+data object LoginRout
+
+@Resource(ApiRouts.CREATE)
+data object CreateAccountRout
 
 @Serializable
 data class AuthBody(

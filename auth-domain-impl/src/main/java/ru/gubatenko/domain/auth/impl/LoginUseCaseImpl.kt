@@ -18,7 +18,7 @@ class LoginUseCaseImpl(
 
     private suspend fun handleLoginByPassword(args: Args.ByPassword) = try {
         val body = AuthBody(args.username, args.password)
-        val result = api.auth(body)
+        val result = api.login(body)
         tokenStore.update(result.accessToken, result.refreshToken)
         Result.Success
     } catch (e: ConnectException) {

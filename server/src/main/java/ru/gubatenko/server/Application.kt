@@ -10,12 +10,14 @@ import ru.gubatenko.server.data.chat.ChatRepositoryImpl
 import ru.gubatenko.server.data.message.MessageRepositoryImpl
 import ru.gubatenko.server.data.UserWebSocketSessionController
 import ru.gubatenko.server.data.DaoStore
+import ru.gubatenko.server.data.user.UserRepositoryImpl
 import ru.gubatenko.server.domain.repo.ChatRepository
 import ru.gubatenko.server.domain.repo.CredentialRepository
 import ru.gubatenko.server.domain.usecase.CreateMessageUseCase
 import ru.gubatenko.server.domain.usecase.LoginUseCase
 import ru.gubatenko.server.domain.usecase.TokenValidateUseCase
 import ru.gubatenko.server.domain.repo.MessageRepository
+import ru.gubatenko.server.domain.repo.UserRepository
 import ru.gubatenko.server.presentation.AuthRouting
 import ru.gubatenko.server.presentation.ChatsRouting
 import ru.gubatenko.server.presentation.MessagesRouting
@@ -34,6 +36,7 @@ val dataModule = module {
     singleOf(::CredentialRepositoryImpl) { bind<CredentialRepository>() }
     singleOf(::ChatRepositoryImpl) { bind<ChatRepository>() }
     singleOf(::MessageRepositoryImpl) { bind<MessageRepository>() }
+    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
 
     singleOf(::UserWebSocketSessionController)
 }
