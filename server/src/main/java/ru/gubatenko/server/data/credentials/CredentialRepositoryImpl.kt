@@ -53,7 +53,7 @@ class CredentialRepositoryImpl(
             this.token = accessToken(id.value.toString(), userId).value
             this.userId = userId.uuid()
         }
-        val refreshCredential = CredentialsDAO.new {
+        val refreshCredential = daoStore.credentialDao().new {
             this.token = refreshToken(id.value.toString(), userId).value
             this.userId = userId.uuid()
         }

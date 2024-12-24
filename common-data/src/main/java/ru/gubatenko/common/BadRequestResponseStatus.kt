@@ -1,4 +1,4 @@
-package ru.gubatenko.domain.auth.impl
+package ru.gubatenko.common
 
 import io.ktor.http.HttpStatusCode
 

@@ -1,6 +1,7 @@
 package ru.gubatenko.domain.auth.impl
 
 import ru.gubatenko.auth.data.AuthBody
+import ru.gubatenko.common.BadRequestResponseStatus
 import ru.gubatenko.credential.store.TokenStore
 import ru.gubatenko.domain.auth.LoginUseCase
 import java.io.IOException

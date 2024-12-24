@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.UUID
 
 object CredentialsTable : UUIDTable("credential") {
-    val token = varchar("token", 50)
+    val token = varchar("token", 308)
     val userId = uuid("user_id")
 }
 

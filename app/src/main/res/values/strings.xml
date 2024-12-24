@@ -2,4 +2,9 @@
     <string name="app_name">Paging Research</string>
     <string name="strFetchingDataFromServer">Loading</string>
     <string name="strRetry">retry\n</string>
+    <string name="asset_statements" translatable="false">
+        [{
+          \"include\": \"http://192.168.0.4:8080/.well-known/assetlinks.json\"
+        }]
+    </string>
 </resources>

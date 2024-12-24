@@ -15,15 +15,21 @@ kotlin {
         jvmTarget = JvmTarget.JVM_21
     }
 }
+//test {
+//    useJUnitPlatform()
+//}
 
 dependencies {
     api project(':credential-domain')
     api project(':auth-domain')
-    implementation project(':auth-data')
+    api project(':auth-data')
     implementation project(':common-data')
 
     implementation(libs.ktor.client.okhttp)
     implementation libs.androidx.room.common
     implementation libs.kotlinx.coroutines.core
+
+    testImplementation libs.testng
+    testImplementation project(':network-transport')
 }
 

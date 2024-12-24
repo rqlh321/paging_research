@@ -9,6 +9,7 @@ import ru.gubatenko.auth.data.AuthBody
 import ru.gubatenko.auth.data.CreateAccountRout
 import ru.gubatenko.auth.data.Credentials
 import ru.gubatenko.auth.data.LoginRout
+import ru.gubatenko.common.BadRequestResponseStatus
 
 class AuthApi(
     private val httpClient: HttpClient
