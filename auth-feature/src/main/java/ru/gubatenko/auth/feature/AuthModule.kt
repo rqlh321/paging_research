@@ -17,10 +17,11 @@ import ru.gubatenko.domain.auth.IsCreateAccountAvailableUseCase
 import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
 import ru.gubatenko.domain.auth.LoginUseCase
 import ru.gubatenko.domain.auth.impl.AuthApi
-import ru.gubatenko.domain.auth.impl.CreateAccountUseCaseImpl
-import ru.gubatenko.domain.auth.impl.IsCreateAccountAvailableUseCaseImpl
+import ru.gubatenko.user.domain.impl.CreateAccountUseCaseImpl
+import ru.gubatenko.user.domain.impl.IsCreateAccountAvailableUseCaseImpl
 import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
 import ru.gubatenko.domain.auth.impl.LoginUseCaseImpl
+import org.koin.core.module.dsl.bind
 
 val authModule = module {
     viewModelOf(::AuthRootViewModel)

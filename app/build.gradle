@@ -59,6 +59,7 @@ dependencies {
     implementation project(':network-transport')
     implementation project(":common-data")
     implementation project(":auth-feature")
+    implementation project(":user-profile-feature")
     implementation project(":chat-domain-impl")
     implementation project(":message-domain-impl")
 

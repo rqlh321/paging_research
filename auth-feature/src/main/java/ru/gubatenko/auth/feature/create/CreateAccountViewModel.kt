@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import ru.gubatenko.app.navigation.AuthRout
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
-import ru.gubatenko.domain.auth.CreateAccountUseCase
-import ru.gubatenko.domain.auth.IsCreateAccountAvailableUseCase
+import ru.gubatenko.user.domain.CreateAccountUseCase
+import ru.gubatenko.user.domain.IsCreateAccountAvailableUseCase
 
 class CreateAccountViewModel(
     private val routerAuth: Channel<AuthRout>,

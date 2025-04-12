@@ -17,9 +17,6 @@ sealed class RootRout {
     }
 
     @Serializable
-    data class ChatScreenDestination(val id: String) : RootRout()
-
-    @Serializable
     data object AuthGraph : RootRout()
 }
 

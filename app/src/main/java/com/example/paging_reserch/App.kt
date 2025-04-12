@@ -2,7 +2,6 @@ package com.example.paging_reserch
 
 import android.app.Application
 import androidx.room.Room
-import com.example.paging_reserch.screen.chat.ChatViewModel
 import com.example.paging_reserch.screen.root.RootScreenViewModel
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.channels.Channel
@@ -17,6 +16,7 @@ import ru.gubatenko.app.navigation.RootRout
 import ru.gubatenko.auth.feature.authModule
 import ru.gubatenko.server_api.Client
 import ru.gubatenko.server_api.ClientConfig
+import ru.gubatenko.user.profile.feature.userProfileModule
 
 class App : Application() {
     override fun onCreate() {
@@ -29,8 +29,8 @@ class App : Application() {
                 databaseModule,
 
                 rootModule,
-                chatModule,
-                authModule
+                authModule,
+                userProfileModule
             )
         }
     }
@@ -59,7 +59,4 @@ val databaseModule = module {
 val rootModule = module {
     single { Channel<RootRout>() }
     viewModelOf(::RootScreenViewModel)
-}
-val chatModule = module {
-    viewModelOf(::ChatViewModel)
 }

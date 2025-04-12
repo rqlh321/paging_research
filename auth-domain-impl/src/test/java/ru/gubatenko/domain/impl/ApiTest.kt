@@ -2,7 +2,7 @@ package ru.gubatenko.domain.impl
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import ru.gubatenko.auth.data.AuthBody
+import ru.gubatenko.auth.data.LoginBody
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
 import ru.gubatenko.domain.auth.impl.AuthApi
@@ -23,7 +23,7 @@ class ApiTest {
         runBlocking {
             try {
                 api.login(
-                    AuthBody(
+                    LoginBody(
                         Username("2"),
                         Password("2"),
                     )

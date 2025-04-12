@@ -21,6 +21,7 @@ import ru.gubatenko.server.domain.repo.UserRepository
 import ru.gubatenko.server.presentation.AuthRouting
 import ru.gubatenko.server.presentation.ChatsRouting
 import ru.gubatenko.server.presentation.MessagesRouting
+import ru.gubatenko.server.presentation.UserRouting
 import ru.gubatenko.server.presentation.WebSocketRouting
 
 val dataModule = module {
@@ -47,6 +48,7 @@ val useCaseModule = module {
 }
 val routingModule = module {
     singleOf(::AuthRouting)
+    singleOf(::UserRouting)
     singleOf(::ChatsRouting)
     singleOf(::MessagesRouting)
     singleOf(::WebSocketRouting)
@@ -54,6 +56,7 @@ val routingModule = module {
     single<List<RoutingSetup>> {
         listOf(
             get<AuthRouting>(),
+            get<UserRouting>(),
             get<ChatsRouting>(),
             get<MessagesRouting>(),
             get<WebSocketRouting>(),

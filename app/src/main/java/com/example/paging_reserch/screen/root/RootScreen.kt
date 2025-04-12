@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.paging_reserch.screen.chat.ChatScreen
+import ru.gubatenko.user.profile.feature.ProfileScreen
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import ru.gubatenko.app.navigation.RootRout
@@ -49,7 +49,6 @@ private fun RootContent(
         startDestination = startDestination
     ) {
         composable<RootRout.AuthGraph> { AuthRootScreen() }
-        composable<RootRout.ChatScreenDestination> { ChatScreen() }
-        composable<RootRout.MainScreenDestination> { }
+        composable<RootRout.MainScreenDestination> { ru.gubatenko.user.profile.feature.ProfileScreen() }
     }
 }

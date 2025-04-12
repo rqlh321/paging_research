@@ -1,6 +1,6 @@
 package ru.gubatenko.domain.auth.impl
 
-import ru.gubatenko.auth.data.AuthBody
+import ru.gubatenko.auth.data.LoginBody
 import ru.gubatenko.common.BadRequestResponseStatus
 import ru.gubatenko.credential.store.TokenStore
 import ru.gubatenko.domain.auth.LoginUseCase
@@ -18,7 +18,7 @@ class LoginUseCaseImpl(
     }
 
     private suspend fun handleLoginByPassword(args: Args.ByPassword) = try {
-        val body = AuthBody(args.username, args.password)
+        val body = LoginBody(args.username, args.password)
         val result = api.login(body)
         tokenStore.update(result.accessToken, result.refreshToken)
         Result.Success

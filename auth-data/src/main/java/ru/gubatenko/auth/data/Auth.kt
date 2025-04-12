@@ -12,11 +12,8 @@ import ru.gubatenko.common.Username
 @Resource(ApiRouts.LOGIN)
 data object LoginRout
 
-@Resource(ApiRouts.CREATE)
-data object CreateAccountRout
-
 @Serializable
-data class AuthBody(
+data class LoginBody(
     val username: Username,
     val password: Password
 )
@@ -26,3 +23,9 @@ data class Credentials(
     val accessToken: AccessToken,
     val refreshToken: RefreshToken
 ) : Response()
+
+@Resource(ApiRouts.LOGOUT_USER)
+data object LogoutUserRout
+
+@Serializable
+data object LogoutUserBody
