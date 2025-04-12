@@ -1,6 +1,7 @@
 package ru.gubatenko.user.domain.impl
 
 import ru.gubatenko.user.domain.DeleteAccountUseCase
+import ru.gubatenko.user.remote.api.UserApi
 
 class DeleteAccountUseCaseImpl(
     private val userApi: UserApi

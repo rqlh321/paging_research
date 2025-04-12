@@ -12,6 +12,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import ru.gubatenko.api.impl.apiModule
 import ru.gubatenko.app.core.android.base
 import ru.gubatenko.app.core.android.databaseModule
 import ru.gubatenko.app.navigation.RootRout
@@ -19,7 +20,6 @@ import ru.gubatenko.auth.feature.authModule
 import ru.gubatenko.domain.auth.IsLoginAvailableUseCase
 import ru.gubatenko.domain.auth.LoginUseCase
 import ru.gubatenko.domain.auth.LogoutUseCase
-import ru.gubatenko.domain.auth.impl.AuthApi
 import ru.gubatenko.domain.auth.impl.IsLoginAvailableUseCaseImpl
 import ru.gubatenko.domain.auth.impl.LoginUseCaseImpl
 import ru.gubatenko.domain.auth.impl.LogoutUseCaseImpl
@@ -31,7 +31,6 @@ import ru.gubatenko.user.domain.IsCreateAccountAvailableUseCase
 import ru.gubatenko.user.domain.impl.CreateAccountUseCaseImpl
 import ru.gubatenko.user.domain.impl.DeleteAccountUseCaseImpl
 import ru.gubatenko.user.domain.impl.IsCreateAccountAvailableUseCaseImpl
-import ru.gubatenko.user.domain.impl.UserApi
 import ru.gubatenko.user.profile.feature.userProfileModule
 
 class App : Application() {
@@ -54,16 +53,12 @@ class App : Application() {
     }
 }
 
-
 val networkTransportModule = module {
     single { ClientConfig() }
     singleOf(::Client)
     single<HttpClient> { get<Client>().httpClient }
 }
-val apiModule = module {
-    singleOf(::AuthApi)
-    singleOf(::UserApi)
-}
+
 val useCase = module {
     factoryOf(::IsLoginAvailableUseCaseImpl) { bind<IsLoginAvailableUseCase>() }
     factoryOf(::LoginUseCaseImpl) { bind<LoginUseCase>() }
@@ -73,6 +68,7 @@ val useCase = module {
     factoryOf(::CreateAccountUseCaseImpl) { bind<CreateAccountUseCase>() }
     factoryOf(::DeleteAccountUseCaseImpl) { bind<DeleteAccountUseCase>() }
 }
+
 val rootModule = module {
     single { Channel<RootRout>() }
     viewModelOf(::RootScreenViewModel)

@@ -20,14 +20,10 @@ kotlin {
 //}
 
 dependencies {
-    api project(':credential-domain')
     api project(':auth-domain')
-    api project(':auth-remote-data')
     implementation project(':common-data')
-
-    implementation(libs.ktor.client.okhttp)
-    implementation libs.androidx.room.common
-    implementation libs.kotlinx.coroutines.core
+    implementation project(':auth-remote-api')
+    implementation project(':credential-domain')
 
     testImplementation libs.testng
     testImplementation project(':network-transport')

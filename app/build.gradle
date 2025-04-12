@@ -68,6 +68,7 @@ dependencies {
     implementation project(":message-domain-impl")
 
     implementation project(":app-core-android")
+    implementation project(":api-impl")
 
     implementation libs.koin.androidx.compose
 

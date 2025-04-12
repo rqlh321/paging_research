@@ -7,7 +7,7 @@ import ru.gubatenko.chat.local.data.ChatDatabaseEntity
 
 class CreateChatUseCaseImpl(
     private val dao: ChatDao,
-    private val api: ChatApi
+    private val api: ChatApiImpl
 ) : CreateChatUseCase() {
     override suspend fun invoke(args: Args) = when (args) {
         is Args.Default -> handleDefault(args)

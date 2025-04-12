@@ -1,4 +1,4 @@
-package ru.gubatenko.domain.auth.impl
+package ru.gubatenko.api.impl
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -10,13 +10,14 @@ import ru.gubatenko.auth.data.LoginBody
 import ru.gubatenko.auth.data.LoginRout
 import ru.gubatenko.auth.data.LogoutUserBody
 import ru.gubatenko.auth.data.LogoutUserRout
+import ru.gubatenko.auth.remote.api.AuthApi
 import ru.gubatenko.common.BadRequestResponseStatus
 
-class AuthApi(
+class AuthApiImpl(
     private val httpClient: HttpClient
-) {
+) : AuthApi {
 
-    suspend fun login(body: LoginBody): Credentials {
+    override suspend fun login(body: LoginBody): Credentials {
         val httpResponse = httpClient.post(LoginRout) { setBody(body) }
         if (httpResponse.status.isSuccess()) {
             return httpResponse.body<Credentials>()
@@ -25,11 +26,8 @@ class AuthApi(
         }
     }
 
-    suspend fun logout(
-        body: LogoutUserBody = LogoutUserBody,
-        rout: LogoutUserRout = LogoutUserRout
-    ) {
-        val httpResponse = httpClient.post(rout) { setBody(body) }
+    override suspend fun logout() {
+        val httpResponse = httpClient.post(LogoutUserRout) { setBody(LogoutUserBody) }
         if (!httpResponse.status.isSuccess()) {
             throw BadRequestResponseStatus(httpResponse.status)
         }

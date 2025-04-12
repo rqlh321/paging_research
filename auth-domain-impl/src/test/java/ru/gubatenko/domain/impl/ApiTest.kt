@@ -5,7 +5,7 @@ import org.junit.Test
 import ru.gubatenko.auth.data.LoginBody
 import ru.gubatenko.common.Password
 import ru.gubatenko.common.Username
-import ru.gubatenko.domain.auth.impl.AuthApi
+import ru.gubatenko.domain.auth.impl.AuthApiImpl
 import ru.gubatenko.server_api.Client
 import ru.gubatenko.server_api.ClientConfig
 
@@ -16,7 +16,7 @@ class ApiTest {
         config = clientConfig,
         tokenStore = tokenStore
     )
-    val api = AuthApi(client.httpClient)
+    val api = AuthApiImpl(client.httpClient)
 
     @Test
     fun loginTest() {

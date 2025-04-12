@@ -13,7 +13,7 @@ class UserTest {
         config = clientConfig,
         tokenStore = tokenStore
     )
-    val api = UserApi(client.httpClient)
+    val api = UserApiImpl(client.httpClient)
 
     @Test
     fun loginTest() {

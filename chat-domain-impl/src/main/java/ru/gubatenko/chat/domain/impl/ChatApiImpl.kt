@@ -11,7 +11,7 @@ import ru.gubatenko.chat.data.Chats
 import ru.gubatenko.chat.data.CreateChatBody
 import ru.gubatenko.chat.data.CreateChatRout
 
-class ChatApi(
+class ChatApiImpl(
     private val httpClient: HttpClient
 ) {
 

@@ -3,6 +3,7 @@ package ru.gubatenko.user.domain.impl
 import ru.gubatenko.auth.data.CreateAccountBody
 import ru.gubatenko.common.BadRequestResponseStatus
 import ru.gubatenko.user.domain.CreateAccountUseCase
+import ru.gubatenko.user.remote.api.UserApi
 import java.io.IOException
 import java.net.ConnectException
 

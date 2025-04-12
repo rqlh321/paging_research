@@ -1,5 +1,6 @@
 package ru.gubatenko.domain.auth.impl
 
+import ru.gubatenko.auth.remote.api.AuthApi
 import ru.gubatenko.domain.auth.LogoutUseCase
 
 class LogoutUseCaseImpl(

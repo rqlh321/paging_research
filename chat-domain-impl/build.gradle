@@ -4,8 +4,6 @@ plugins {
     id 'java-library'
     alias(libs.plugins.jetbrains.kotlin.jvm)
 }
-
-
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -22,7 +20,4 @@ dependencies {
     implementation project(':chat-local-data')
     implementation project(':chat-remote-data')
     implementation project(':common-data')
-
-    implementation(libs.ktor.client.okhttp)
-    implementation libs.kotlinx.coroutines.core
 }

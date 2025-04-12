@@ -18,12 +18,8 @@ kotlin {
 
 dependencies {
     api project(':user-domain')
-    api project(':user-remote-data')
+    implementation project(':user-remote-api')
     implementation project(':common-data')
-
-    implementation(libs.ktor.client.okhttp)
-    implementation libs.androidx.room.common
-    implementation libs.kotlinx.coroutines.core
 
     testImplementation libs.testng
     testImplementation project(':network-transport')
