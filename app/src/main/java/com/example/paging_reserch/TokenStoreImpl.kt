@@ -1,4 +1,4 @@
-package ru.gubatenko.auth.feature
+package com.example.paging_reserch
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,6 +7,7 @@ import androidx.security.crypto.MasterKeys
 import ru.gubatenko.common.AccessToken
 import ru.gubatenko.common.RefreshToken
 import ru.gubatenko.credential.store.TokenStore
+import androidx.core.content.edit
 
 class TokenStoreImpl(
     context: Context
@@ -23,10 +24,10 @@ class TokenStoreImpl(
         accessToken: AccessToken,
         refreshToken: RefreshToken
     ) {
-        sharedPreferences.edit()
-            .putString(ACCESS_TOKEN, accessToken.value)
-            .putString(REFRESH_TOKEN, refreshToken.value)
-            .apply()
+        sharedPreferences.edit {
+            putString(ACCESS_TOKEN, accessToken.value)
+                .putString(REFRESH_TOKEN, refreshToken.value)
+        }
     }
 
     override fun getAccessToken() = AccessToken(

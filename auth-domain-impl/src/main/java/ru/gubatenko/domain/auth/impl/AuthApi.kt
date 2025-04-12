@@ -28,6 +28,10 @@ class AuthApi(
     suspend fun logout(
         body: LogoutUserBody = LogoutUserBody,
         rout: LogoutUserRout = LogoutUserRout
-    ) = httpClient.post(rout) { setBody(body) }
-
+    ) {
+        val httpResponse = httpClient.post(rout) { setBody(body) }
+        if (!httpResponse.status.isSuccess()) {
+            throw BadRequestResponseStatus(httpResponse.status)
+        }
+    }
 }

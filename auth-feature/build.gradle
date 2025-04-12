@@ -37,7 +37,7 @@ android {
 dependencies {
     implementation project(':app-navigation')
     implementation project(":common-data")
-    implementation project(":auth-domain-impl")
+    implementation project(":auth-domain")
     implementation project(":user-domain")
 
     implementation libs.androidx.security.crypto
