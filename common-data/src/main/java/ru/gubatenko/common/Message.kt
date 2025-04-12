@@ -1,6 +1,5 @@
 package ru.gubatenko.common
 
-import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable
 import java.util.UUID
 

@@ -1,4 +1,4 @@
-package ru.gubatenko.chat.domain.impl
+package ru.gubatenko.chat.local.data
 
 import androidx.room.Dao
 import androidx.room.Query

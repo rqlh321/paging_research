@@ -2,7 +2,6 @@ package com.example.paging_reserch.ui.message
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
-import ru.gubatenko.message.domain.impl.MessageDatabaseEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.UUID
@@ -32,13 +31,6 @@ data class TextMessageItem(
 ) : MessageItem() {
     override val type = Const.MESSAGE
     val corners = Const.NOT_MY_MESSAGE_CORNERS
-
-    constructor(entity: MessageDatabaseEntity) : this(
-        id = entity.messageId,
-        date = Const.date.format(entity.timestamp),
-        time = Const.time.format(entity.timestamp),
-    )
-
 }
 
 object Const {

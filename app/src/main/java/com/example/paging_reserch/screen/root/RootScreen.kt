@@ -49,6 +49,6 @@ private fun RootContent(
         startDestination = startDestination
     ) {
         composable<RootRout.AuthGraph> { AuthRootScreen() }
-        composable<RootRout.MainScreenDestination> { ru.gubatenko.user.profile.feature.ProfileScreen() }
+        composable<RootRout.MainScreenDestination> { ProfileScreen() }
     }
 }

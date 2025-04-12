@@ -22,7 +22,7 @@ kotlin {
 dependencies {
     api project(':credential-domain')
     api project(':auth-domain')
-    api project(':auth-data')
+    api project(':auth-remote-data')
     implementation project(':common-data')
 
     implementation(libs.ktor.client.okhttp)

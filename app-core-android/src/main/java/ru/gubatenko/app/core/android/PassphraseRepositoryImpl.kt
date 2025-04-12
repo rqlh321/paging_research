@@ -1,16 +1,20 @@
-package com.example.paging_reserch
+package ru.gubatenko.app.core.android
 
 import android.content.Context
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
+import ru.gubatenko.credential.store.PassphraseRepository
 import java.io.File
 import java.security.SecureRandom
 
 private const val PASSPHRASE_LENGTH = 32
+private const val CHILD = "passphrase.bin"
 
-class PassphraseRepository(private val context: Context) {
-    fun getPassphrase(): ByteArray {
-        val file = File(context.filesDir, "passphrase.bin")
+class PassphraseRepositoryImpl(
+    private val context: Context
+) : PassphraseRepository() {
+    override fun getPassphrase(): ByteArray {
+        val file = File(context.filesDir, CHILD)
         val encryptedFile = EncryptedFile.Builder(
             file,
             context,

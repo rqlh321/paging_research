@@ -1,4 +1,4 @@
-package ru.gubatenko.message.domain.impl
+package ru.gubatenko.message.local.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

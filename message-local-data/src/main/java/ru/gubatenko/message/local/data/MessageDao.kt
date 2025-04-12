@@ -1,4 +1,4 @@
-package ru.gubatenko.message.domain.impl
+package ru.gubatenko.message.local.data
 
 import androidx.room.Dao
 import androidx.room.Insert

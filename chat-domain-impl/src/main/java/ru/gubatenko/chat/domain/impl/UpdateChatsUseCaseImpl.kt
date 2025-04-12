@@ -1,6 +1,8 @@
 package ru.gubatenko.chat.domain.impl
 
 import ru.gubatenko.chat.domain.UpdateChatUseCase
+import ru.gubatenko.chat.local.data.ChatDao
+import ru.gubatenko.chat.local.data.ChatDatabaseEntity
 
 class UpdateChatsUseCaseImpl(
     private val dao: ChatDao,

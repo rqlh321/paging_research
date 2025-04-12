@@ -19,10 +19,10 @@ kotlin {
 
 dependencies {
     api project(':chat-domain')
-    implementation project(':chat-data')
+    implementation project(':chat-local-data')
+    implementation project(':chat-remote-data')
     implementation project(':common-data')
 
     implementation(libs.ktor.client.okhttp)
-    implementation libs.androidx.room.common
     implementation libs.kotlinx.coroutines.core
 }

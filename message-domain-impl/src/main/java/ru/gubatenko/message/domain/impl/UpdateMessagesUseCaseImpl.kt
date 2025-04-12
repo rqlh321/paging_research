@@ -1,6 +1,7 @@
 package ru.gubatenko.message.domain.impl
 
 import ru.gubatenko.message.domain.UpdateMessagesUseCase
+import ru.gubatenko.message.local.data.MessageDao
 
 class UpdateMessagesUseCaseImpl(
     private val api: MessageApi,

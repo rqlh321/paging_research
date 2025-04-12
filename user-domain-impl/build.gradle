@@ -18,7 +18,7 @@ kotlin {
 
 dependencies {
     api project(':user-domain')
-    api project(':user-data')
+    api project(':user-remote-data')
     implementation project(':common-data')
 
     implementation(libs.ktor.client.okhttp)

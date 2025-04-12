@@ -18,7 +18,8 @@ kotlin {
 
 dependencies {
     api project(':message-domain')
-    implementation project(':message-data')
+    implementation project(':message-local-data')
+    implementation project(':message-remote-data')
     implementation project(':common-data')
 
     implementation(libs.ktor.client.okhttp)

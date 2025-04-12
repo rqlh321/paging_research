@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.devtools.ksp)
 }
 
 android {
@@ -68,7 +67,7 @@ dependencies {
     implementation project(":chat-domain-impl")
     implementation project(":message-domain-impl")
 
-    implementation libs.androidx.security.crypto
+    implementation project(":app-core-android")
 
     implementation libs.koin.androidx.compose
 
@@ -86,10 +85,6 @@ dependencies {
 
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
-
-    implementation libs.android.database.sqlcipher
-    implementation libs.androidx.room.ktx
-    ksp libs.androidx.room.compiler
 
     testImplementation libs.junit
 
